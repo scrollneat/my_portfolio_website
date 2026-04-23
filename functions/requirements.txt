@@ -1,3 +1,4 @@
 firebase-functions
 fastapi
 firebase-admin
+a2wsgi

@@ -38,8 +38,5 @@ def contact(msg: ContactMessage):
     print(f"Received contact from {msg.name} ({msg.email}): {msg.subject} - {msg.message}")
     return {"status": "delivered", "timestamp": datetime.now().isoformat()}
 
-@https_fn.on_request()
-def api(req: https_fn.Request) -> https_fn.Response:
-    # Note: FastAPI is ASGI, while Firebase expects WSGI.
-    # To fully bridge them in production, you will need an ASGI-to-WSGI adapter.
-    pass
+from a2wsgi import ASGIMiddleware
+api = https_fn.on_request()(ASGIMiddleware(app))
