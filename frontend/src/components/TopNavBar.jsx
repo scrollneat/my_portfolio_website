@@ -19,15 +19,16 @@ export default function TopNavBar({ toggleTheme, theme }) {
         </div>
         <div className="flex gap-4">
             <motion.button 
-                whileTap={{ scale: 0.8, rotate: -90 }}
-                whileHover={{ scale: 1.2, color: 'var(--accent)' }}
+                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.05 }}
                 onClick={toggleTheme}
                 title={theme === 'obsidian' ? "Switch to Emerald Mode" : "Switch to Obsidian Mode"}
-                className="text-primary hover:text-accent hover:drop-shadow-[0_0_8px_rgba(var(--accent),0.6)] transition-colors"
+                className="flex items-center gap-3 px-5 py-2.5 border border-primary/40 rounded-full bg-primary/10 text-primary hover:text-accent hover:border-accent hover:bg-accent/10 transition-colors duration-300 animate-pulse hover:animate-none shadow-[0_0_8px_var(--theme-glow)]"
             >
-                <span className="material-symbols-outlined" style={{fontVariationSettings: "'FILL' 0"}}>
-                    palette
+                <span className="material-symbols-outlined text-[22px]" style={{fontVariationSettings: "'FILL' 1"}}>
+                    {theme === 'obsidian' ? 'dark_mode' : 'light_mode'}
                 </span>
+                <span className="font-mono text-sm tracking-widest font-bold hidden sm:inline">SWITCH_UI</span>
             </motion.button>
         </div>
     </motion.nav>

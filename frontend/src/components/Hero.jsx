@@ -87,7 +87,7 @@ export default function Hero() {
 
                         <motion.h1 variants={blurVariants} className="font-display font-black text-on-surface tracking-tighter leading-[1.1]">
                             <span className="text-4xl md:text-5xl lg:text-6xl text-on-surface">Hi, I'm</span><br />
-                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-accent to-primary" style={{ whiteSpace: "nowrap", fontSize: "clamp(2.5rem, 6vw, 5.5rem)" }}>Barathiselvan.</span>
+                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-accent to-primary drop-shadow-[0_0_10px_var(--theme-glow)]" style={{ whiteSpace: "nowrap", fontSize: "clamp(2.5rem, 6vw, 5.5rem)" }}>Barathiselvan.</span>
                         </motion.h1>
                         <motion.h2 variants={itemVariants} className="font-headline text-3xl md:text-5xl lg:text-6xl font-bold text-primary tracking-tight leading-tight">
                             Aspiring Data Engineer.
@@ -126,9 +126,13 @@ export default function Hero() {
                     </motion.div>
 
                     <motion.div variants={itemVariants} className="pt-4">
-                        <p className="font-mono text-xs bg-primary/5 text-primary border border-primary/20 inline-block px-4 py-2 rounded transition-colors duration-400 animate-pulse">
-                            SYSTEM THROUGHPUT: STATUS: {status} | NODES: {nodeCount} | UPLINKS: {networkUplinks}
-                        </p>
+                        <div className="inline-block rounded-md p-[1px] bg-gradient-to-r from-accent to-primary animate-pulse shadow-[0_0_8px_var(--theme-glow)]">
+                            <div className="bg-bg px-4 py-2 rounded-md font-mono text-xs">
+                                <span className="bg-clip-text text-transparent bg-gradient-to-r from-accent to-primary font-bold tracking-wider">
+                                    SYSTEM THROUGHPUT: STATUS: {status} | NODES: {nodeCount} | UPLINKS: {networkUplinks}
+                                </span>
+                            </div>
+                        </div>
                     </motion.div>
                 </motion.div>
 

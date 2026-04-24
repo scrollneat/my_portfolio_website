@@ -9,16 +9,18 @@
   --accent: #06b6d4;
   --bg: #0c0a0f;
   --card-border: rgba(255,255,255,0.1);
+  --theme-glow: rgba(168,85,247,0.15);
 }
 
 /* =============================================
    EMERALD THEME ([data-theme='emerald'])
    ============================================= */
 [data-theme='emerald'] {
-  --primary: #10b981;
-  --accent: #34d399;
+  --primary: #05d58c;
+  --accent: #00f0ff;
   --bg: #050805;
   --card-border: rgba(16,185,129,0.2);
+  --theme-glow: rgba(5,213,140,0.15);
 }
 
 @layer base {
