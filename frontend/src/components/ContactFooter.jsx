@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import emailjs from '@emailjs/browser';
 
 export default function ContactFooter() {
   const [formData, setFormData] = useState({
@@ -23,24 +22,18 @@ export default function ContactFooter() {
     
     setIsSending(true);
     try {
-      const templateParams = {
-        from_name: formData.name,
-        user_email: formData.email,
-        subject: formData.subject,
-        message: formData.message
-      };
-
-      const res = await emailjs.send(
-        "service_v828swb",
-        "template_z9vo3f4",
-        templateParams,
-        "wau1F0eo2TJ3vqZ5H"
-      );
-      if (res.status === 200) {
-        setFormData({ name: '', email: '', subject: '', message: '' });
-        setSuccess(true);
-        setTimeout(() => setSuccess(false), 5000);
-      }
+      await fetch("https://script.google.com/macros/s/AKfycby2WAuOXvtWnor8VdNigtKbMNZz6TVrqIh35T9mlU5BTR-GJckd_4vhZ-agz0nAgBLt/exec", {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain"
+        },
+        body: JSON.stringify(formData)
+      });
+      
+      setFormData({ name: '', email: '', subject: '', message: '' });
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 5000);
     } catch (err) {
       console.error(err);
     } finally {
@@ -115,7 +108,7 @@ export default function ContactFooter() {
                                   </>
                               ) : success ? (
                                   <>
-                                      [ MESSAGE_SENT ]
+                                      [ TRANSMISSION_SUCCESS ]
                                       <span className="material-symbols-outlined text-sm" style={{fontVariationSettings: "'FILL' 0"}}>check_circle</span>
                                   </>
                               ) : (
