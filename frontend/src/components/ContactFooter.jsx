@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import emailjs from '@emailjs/browser';
 
 export default function ContactFooter() {
   const [formData, setFormData] = useState({
@@ -22,15 +23,20 @@ export default function ContactFooter() {
     
     setIsSending(true);
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
-      const res = await fetch(`${apiUrl}/api/contact`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(formData)
-      });
-      if (res.ok) {
+      const templateParams = {
+        from_name: formData.name,
+        user_email: formData.email,
+        subject: formData.subject,
+        message: formData.message
+      };
+
+      const res = await emailjs.send(
+        "service_v828swb",
+        "template_z9vo3f4",
+        templateParams,
+        "wau1F0eo2TJ3vqZ5H"
+      );
+      if (res.status === 200) {
         setFormData({ name: '', email: '', subject: '', message: '' });
         setSuccess(true);
         setTimeout(() => setSuccess(false), 5000);
@@ -53,7 +59,7 @@ export default function ContactFooter() {
               </div>
 
               {/* Contact Form */}
-              <form className="space-y-10">
+              <form className={`space-y-10 transition-all duration-700 ${success ? 'shadow-[0_0_40px_rgba(16,185,129,0.3)] border border-emerald-500/50 rounded-xl p-8 bg-emerald-500/5' : 'border border-transparent p-8'}`}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                       {/* Name Input */}
                       <div className="relative group">
@@ -106,6 +112,11 @@ export default function ContactFooter() {
                                   <>
                                       [ SENDING... ]
                                       <span className="animate-spin material-symbols-outlined text-sm" style={{fontVariationSettings: "'FILL' 0"}}>sync</span>
+                                  </>
+                              ) : success ? (
+                                  <>
+                                      [ MESSAGE_SENT ]
+                                      <span className="material-symbols-outlined text-sm" style={{fontVariationSettings: "'FILL' 0"}}>check_circle</span>
                                   </>
                               ) : (
                                   <>

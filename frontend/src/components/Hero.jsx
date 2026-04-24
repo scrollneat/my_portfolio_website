@@ -36,21 +36,24 @@ const letterVariants = {
 
 
 export default function Hero() {
-    const [throughput, setThroughput] = useState("CONNECTING TO CORE...");
+    const [nodeCount, setNodeCount] = useState('0');
+    const [networkUplinks, setNetworkUplinks] = useState('0');
+    const [status, setStatus] = useState('CONNECTING...');
 
     useEffect(() => {
-        const apiUrl = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
-        fetch(`${apiUrl}/api/system-status`)
-            .then(res => res.json())
+        fetch('https://api.github.com/users/scrollneat')
+            .then(res => {
+                if (!res.ok) throw new Error("Fetch failed");
+                return res.json();
+            })
             .then(data => {
-                if (data.throughput) {
-                    setThroughput(data.throughput);
+                if(data.public_repos !== undefined) {
+                    setNodeCount(data.public_repos);
+                    setNetworkUplinks(data.followers);
+                    setStatus('OPERATIONAL');
                 }
             })
-            .catch(err => {
-                console.error("Failed to fetch system status", err);
-                setThroughput("OFFLINE");
-            });
+            .catch(() => setStatus('OFFLINE_RETRYING'));
     }, []);
 
     return (
@@ -123,8 +126,8 @@ export default function Hero() {
                     </motion.div>
 
                     <motion.div variants={itemVariants} className="pt-4">
-                        <p className="font-mono text-xs bg-primary/5 text-primary border border-primary/20 inline-block px-4 py-2 rounded transition-colors duration-400">
-                            SYSTEM THROUGHPUT: {throughput}
+                        <p className="font-mono text-xs bg-primary/5 text-primary border border-primary/20 inline-block px-4 py-2 rounded transition-colors duration-400 animate-pulse">
+                            SYSTEM THROUGHPUT: STATUS: {status} | NODES: {nodeCount} | UPLINKS: {networkUplinks}
                         </p>
                     </motion.div>
                 </motion.div>
