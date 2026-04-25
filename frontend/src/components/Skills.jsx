@@ -21,7 +21,7 @@ function SkillCard({ category, idx }) {
                 : { borderColor: 'rgba(255,255,255,0.1)', boxShadow: 'none', scale: 1 }
             }
             transition={{ duration: 0.5, ease: 'easeOut', delay: idx * 0.05 }}
-            className="group relative bg-bg/50 backdrop-blur-md border border-card-border p-8 transition-colors duration-500 hover:bg-bg/80 hover:border-primary flex flex-col h-full overflow-hidden"
+            className="group relative bg-bg/50 backdrop-blur-md border border-card-border p-8 transition-colors duration-500 hover:bg-bg/80 hover:border-primary flex flex-col h-full overflow-hidden rounded-2xl"
         >
             {/* Hover/inView Glow Overlay */}
             <motion.div

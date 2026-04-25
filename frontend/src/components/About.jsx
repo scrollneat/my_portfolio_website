@@ -18,6 +18,23 @@ const floatingCircles = [
 const EASE = [0.22, 1, 0.36, 1];
 
 export default function About() {
+    const startDate = new Date('2024-08-22');
+    const today = new Date();
+
+    // Calculate the difference in months
+    let months = (today.getFullYear() - startDate.getFullYear()) * 12;
+    months += today.getMonth() - startDate.getMonth();
+
+    // If today's date is on or after the start day of the month, 
+    // count the current month as 'active' or 'started'
+    if (today.getDate() >= startDate.getDate()) {
+        months += 1;
+    }
+
+    // Convert to decimal years and round to 1 decimal place
+    // This matches company portals that round up to the next tenth
+    const yearsOfExperience = (months / 12).toFixed(1);
+
     const photoRef = useRef(null);
     const terminalRef = useRef(null);
 
@@ -49,7 +66,7 @@ export default function About() {
     return (
         <section
             id="about"
-            className="relative pt-28 pb-24 px-4 sm:px-8 max-w-[1600px] mx-auto overflow-hidden"
+            className="relative pt-12 md:pt-28 pb-24 px-4 sm:px-8 max-w-[1600px] mx-auto overflow-hidden"
         >
             {/* Floating Background Circles — clipped by overflow-hidden on section */}
             <div className="absolute inset-0 z-0 pointer-events-none">
@@ -94,39 +111,34 @@ export default function About() {
                 >
                     {/* Outer wrapper — NOT overflow-hidden so halo is never clipped */}
                     <div
-                        className="relative group w-full max-w-[300px] sm:max-w-[350px] md:max-w-[400px] mx-auto"
+                        className="relative group w-full max-w-[320px] sm:max-w-[380px] md:max-w-[480px] mx-auto mt-[-4rem] md:mt-0"
                         onTouchStart={triggerGlitch}
                     >
-
-                        {/* ★ HALO — lives OUTSIDE overflow-hidden, always visible */}
-                        <div
+                        {/* Cinematic Background Layer */}
+                        <div 
+                            className="absolute inset-x-[-10%] inset-y-[-5%] -z-10 rounded-[3rem] overflow-hidden opacity-80"
                             style={{
-                                position: 'absolute',
-                                top: '50%',
-                                left: '50%',
-                                transform: 'translate(-50%, -50%)',
-                                width: '160%',
-                                height: '160%',
-                                zIndex: 1,
-                                background: 'radial-gradient(circle, var(--theme-glow) 0%, transparent 60%)',
-                                borderRadius: '50%',
-                                pointerEvents: 'none',
-                                filter: 'blur(30px)',
-                                opacity: 1,
+                                background: 'radial-gradient(circle at 50% 30%, rgba(var(--primary-rgb), 0.3) 0%, transparent 70%), linear-gradient(180deg, transparent, rgba(0,0,0,0.8) 90%)'
                             }}
-                        />
+                        >
+                            {/* Subtle Glitch Scanline */}
+                            <motion.div 
+                                className="absolute inset-x-0 h-[1px] bg-primary/30 shadow-[0_0_15px_rgba(var(--primary-rgb),0.5)]"
+                                animate={{ top: ['-10%', '110%'] }}
+                                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                            />
+                        </div>
 
-                        {/* Inner image box — overflow-hidden for img clipping only */}
-                        <div className="relative z-10 w-full aspect-square rounded-2xl border border-white/10 group-hover:border-primary/50 shadow-[0_0_30px_var(--theme-glow)] group-hover:shadow-[0_0_60px_var(--theme-glow)] transition-all duration-500 ease-in-out group-hover:scale-105 overflow-hidden bg-black/50">
-
+                        {/* Portrait Cutout Container */}
+                        <div className="relative z-10 w-full aspect-square transition-all duration-700 ease-in-out group-hover:scale-105 overflow-hidden rounded-2xl">
                             {/* Base Image */}
                             <img
                                 src={profileImg}
                                 alt="Barathiselvan Profile"
-                                className="w-full h-full object-cover transition-transform duration-500 ease-in-out"
+                                className="w-full h-full object-cover transition-transform duration-700 ease-in-out filter brightness-110 contrast-110"
                             />
 
-                            {/* Glitch Image Layer — triggered by hover on desktop OR touch on mobile */}
+                            {/* Glitch Image Layer */}
                             <img
                                 src={profileImg}
                                 alt="Barathiselvan Profile Glitch"
@@ -137,7 +149,7 @@ export default function About() {
                                 }`}
                             />
 
-                            {/* Cinematic Digital Scan Line */}
+                            {/* Cinematic Digital Scan Line (Overlay on Photo) */}
                             <motion.div
                                 className="absolute left-0 w-full h-[2px] bg-gradient-to-r from-emerald-400 via-primary to-purple-500 shadow-[0_0_20px_rgba(168,85,247,0.8)] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out z-20"
                                 animate={{ top: ["0%", "100%"] }}
@@ -145,7 +157,7 @@ export default function About() {
                             />
 
                             {/* Overlay Tint */}
-                            <div className="absolute inset-0 bg-primary/10 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                            <div className="absolute inset-0 bg-primary/5 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                         </div>
                     </div>
                 </motion.div>
@@ -159,7 +171,7 @@ export default function About() {
                     }
                     transition={{ duration: 0.9, ease: EASE }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full bg-[#0a0a0a]/50 dark:bg-[#050505]/50 backdrop-blur-md border border-card-border rounded-lg shadow-2xl overflow-hidden"
+                    className="w-full bg-[#0a0a0a]/50 dark:bg-[#050505]/50 backdrop-blur-md border border-card-border rounded-2xl shadow-2xl overflow-hidden"
                 >
                     {/* Terminal Header */}
                     <div className="flex items-center px-4 py-3 bg-white/5 border-b border-card-border relative">
@@ -189,7 +201,9 @@ export default function About() {
                             </div>
                             <div className="flex flex-col sm:flex-row sm:gap-4 border-l-2 border-primary/50 pl-4 py-1 items-start sm:items-center">
                                 <span className="bg-emerald-500/20 text-emerald-400 font-bold min-w-[120px] sm:min-w-[140px] text-center rounded-full px-3 py-1 text-xs sm:text-sm shadow-[0_0_10px_rgba(16,185,129,0.2)] border border-emerald-500/20">[HISTORY]</span>
-                                <span className="text-white mt-1 sm:mt-0 text-sm sm:text-base">1.6 Years @ Cognizant</span>
+                                <span className="text-white mt-1 sm:mt-0 text-sm sm:text-base">
+                                    {yearsOfExperience} Years @ Cognizant | Freelance Content Writer
+                                </span>
                             </div>
                             <div className="flex flex-col sm:flex-row sm:gap-4 border-l-2 border-primary/50 pl-4 py-1 items-start sm:items-center">
                                 <span className="bg-accent/20 text-accent font-bold min-w-[120px] sm:min-w-[140px] text-center rounded-full px-3 py-1 text-xs sm:text-sm shadow-[0_0_10px_rgba(6,182,212,0.2)] border border-accent/20">[SKILLS]</span>

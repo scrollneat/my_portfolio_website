@@ -27,13 +27,16 @@ export default function TopNavBar({ toggleTheme, theme }) {
         {/* Desktop Nav */}
         <div className="hidden lg:flex gap-8">
             {navLinks.map((link) => (
-                <a 
+                <button 
                     key={link.name}
+                    onClick={() => {
+                        const el = document.getElementById(link.href.substring(1));
+                        if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    }}
                     className="text-zinc-500 hover:text-primary transition-colors duration-300 font-mono tracking-tighter uppercase text-sm hover:drop-shadow-[0_0_8px_rgba(var(--primary),0.6)]" 
-                    href={link.href}
                 >
                     {link.name}
-                </a>
+                </button>
             ))}
         </div>
 
@@ -80,15 +83,18 @@ export default function TopNavBar({ toggleTheme, theme }) {
                 >
                     <div className="flex flex-col p-8 gap-6">
                         {navLinks.map((link) => (
-                            <a 
+                            <button 
                                 key={link.name}
-                                onClick={() => setIsMenuOpen(false)}
-                                className="text-2xl font-mono tracking-widest text-zinc-400 hover:text-primary transition-all duration-300"
-                                href={link.href}
+                                onClick={() => {
+                                    setIsMenuOpen(false);
+                                    const el = document.getElementById(link.href.substring(1));
+                                    if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth' }), 300);
+                                }}
+                                className="text-2xl font-mono tracking-widest text-zinc-400 hover:text-primary transition-all duration-300 text-left"
                             >
                                 <span className="text-primary/40 mr-4 text-sm font-bold">0{navLinks.indexOf(link)+1}</span>
                                 {link.name}
-                            </a>
+                            </button>
                         ))}
                     </div>
                 </motion.div>
