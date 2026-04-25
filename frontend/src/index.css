@@ -60,3 +60,93 @@
 .group:hover .group-hover\:-rotate-y-12 {
   transform: perspective(1000px) rotateY(-12deg) rotateX(4deg);
 }
+
+/* Holographic Glitch Protocol */
+@keyframes glitch-jitter {
+  0% { transform: scale(1.05) translate(0); }
+  2% { transform: scale(1.05) translate(-3px, 2px); }
+  4% { transform: scale(1.05) translate(3px, -2px); }
+  6% { transform: scale(1.05) translate(-2px, 1px); }
+  8% { transform: scale(1.05) translate(2px, -1px); }
+  10% { transform: scale(1.05) translate(0); }
+  100% { transform: scale(1.05) translate(0); }
+}
+
+.group:hover .main-glitch-img, .group:active .main-glitch-img {
+  animation: glitch-jitter 2.5s infinite linear;
+}
+
+/* Cinematic Hexagon Grid Background */
+.bg-grid-hexagons {
+  background-color: transparent;
+  background-image: 
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='hexagons' fill='%23ffffff' fill-opacity='0.05' fill-rule='nonzero'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* TV Glitch Animation */
+@keyframes tv-glitch {
+  0% { transform: translate(0); filter: drop-shadow(0 0 0 transparent); clip-path: inset(0 0 0 0); }
+  25% { transform: translate(-2px, 0); filter: drop-shadow(-3px 0 rgba(255,0,0,0.6)) drop-shadow(3px 0 rgba(0,0,255,0.6)); clip-path: inset(10% 0 80% 0); }
+  50% { transform: translate(2px, 0); filter: drop-shadow(3px 0 rgba(255,0,0,0.6)) drop-shadow(-3px 0 rgba(0,0,255,0.6)); clip-path: inset(80% 0 10% 0); }
+  75% { transform: translate(-1px, 0); filter: drop-shadow(-3px 0 rgba(255,0,0,0.6)) drop-shadow(3px 0 rgba(0,0,255,0.6)); clip-path: inset(40% 0 40% 0); }
+  100% { transform: translate(0); filter: drop-shadow(0 0 0 transparent); clip-path: inset(0 0 0 0); }
+}
+
+.group:hover .group-hover\:animate-tv-glitch {
+  animation: tv-glitch 0.2s ease-in-out 1;
+}
+
+/* =============================================
+   MOBILE TOUCH: Active state mirrors hover
+   CSS group-hover: never fires on touch devices.
+   These rules make :active on .group behave
+   identically to :hover for all card effects.
+   ============================================= */
+@media (hover: none) and (pointer: coarse) {
+  /* Opacity reveals (glow overlays, scan lines, buttons) */
+  .group:active .group-hover\:opacity-100 { opacity: 1 !important; }
+
+  /* Border highlights */
+  .group:active .group-hover\:border-primary\/50 {
+    border-color: color-mix(in srgb, var(--primary) 50%, transparent) !important;
+  }
+  .group:active .group-hover\:border-primary {
+    border-color: var(--primary) !important;
+  }
+
+  /* Background fills */
+  .group:active .group-hover\:bg-primary\/20 {
+    background-color: color-mix(in srgb, var(--primary) 20%, transparent) !important;
+  }
+  .group:active .group-hover\:bg-primary\/30 {
+    background-color: color-mix(in srgb, var(--primary) 30%, transparent) !important;
+  }
+  .group:active .group-hover\:bg-bg\/80 {
+    background-color: color-mix(in srgb, var(--bg) 80%, transparent) !important;
+  }
+  .group:active .group-hover\:bg-white\/10 {
+    background-color: rgba(255,255,255,0.1) !important;
+  }
+
+  /* Text colour */
+  .group:active .group-hover\:text-primary { color: var(--primary) !important; }
+
+  /* Scale / lift */
+  .group:active .group-hover\:scale-105 { transform: scale(1.05) !important; }
+  .group:active .group-hover\:-translate-y-8 { transform: translateY(-2rem) !important; }
+
+  /* Box shadows (glow rings on project/cert cards) */
+  .group:active .group-hover\:shadow-\[0_0_40px_rgba\(207\,188\,255\,0\.3\)\] {
+    box-shadow: 0 0 40px rgba(207,188,255,0.3) !important;
+  }
+  .group:active .group-hover\:shadow-\[0_0_60px_var\(--theme-glow\)\] {
+    box-shadow: 0 0 60px var(--theme-glow) !important;
+  }
+
+  /* Transition items that appear on hover (action buttons on cards) */
+  .group:active .group-hover\:translate-y-0 { transform: translateY(0) !important; }
+  .group:active .group-hover\:opacity-100.translate-y-4 {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+}

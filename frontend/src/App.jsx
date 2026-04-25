@@ -7,6 +7,7 @@ import Certifications from './components/Certifications';
 import ProjectsGrid from './components/ProjectsGrid';
 import ContactFooter from './components/ContactFooter';
 import ParticleNetwork from './components/ParticleNetwork';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   const [theme, setTheme] = useState(() => {
@@ -30,6 +31,13 @@ function App() {
         <ParticleNetwork theme={theme} />
       </div>
       <TopNavBar toggleTheme={toggleTheme} theme={theme} />
+      <ScrollToTop />
+      {/* 
+        AnimatePresence is intentionally NOT wrapping these sections.
+        These sections are always mounted and never unmount, so AnimatePresence 
+        and exit props do nothing here. Scroll animations are handled via 
+        useInView inside each component.
+      */}
       <Hero />
       <About />
       <ProjectsGrid />

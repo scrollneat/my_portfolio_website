@@ -1,5 +1,5 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { useState, useRef } from 'react';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -37,9 +37,17 @@ const certs = [
 
 export default function Certifications() {
     const [selectedImage, setSelectedImage] = useState(null);
+    const sectionRef = useRef(null);
+    const isInView = useInView(sectionRef, { once: false, amount: 0.05 });
 
     return (
-        <motion.section id="certifications" className="py-24 px-8 max-w-[1600px] mx-auto space-y-12" initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.8, ease: 'easeOut' }}>
+        <motion.section
+            ref={sectionRef}
+            id="certifications"
+            className="py-24 px-8 max-w-[1600px] mx-auto space-y-12"
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        >
             <div className="space-y-4">
                 <h2 className="text-4xl font-headline font-bold tracking-tight text-white uppercase">Credentials</h2>
                 <p className="font-label text-sm text-white/60 max-w-2xl">// Verified capabilities in core data platform ecosystems.</p>
@@ -50,7 +58,7 @@ export default function Certifications() {
                 variants={containerVariants}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true, margin: "-50px" }}
+                viewport={{ once: false, amount: 0.1 }}
             >
                 {certs.map((cert, idx) => (
                     <motion.div 

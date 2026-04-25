@@ -1,36 +1,99 @@
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
 
 export default function TopNavBar({ toggleTheme, theme }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const navLinks = [
+    { name: 'ABOUT', href: '#about' },
+    { name: 'PROJECTS', href: '#projects' },
+    { name: 'SKILLS', href: '#skills' },
+    { name: 'CERTIFICATIONS', href: '#certifications' },
+    { name: 'CONTACT', href: '#connect' },
+  ];
+
   return (
     <motion.nav 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="fixed top-0 left-0 w-full h-20 flex items-center justify-between px-8 max-w-full bg-transparent backdrop-blur-[20px] border-b border-white/10 shadow-[0_4px_30px_rgba(103,80,164,0.1)] z-50 transition-all duration-500 ease-out active:scale-95">
-        <div className="text-lg font-black font-mono tracking-widest text-white">
+        className="fixed top-0 left-0 w-full h-20 flex items-center justify-between px-6 md:px-12 bg-bg/80 backdrop-blur-xl border-b border-white/10 z-[100]">
+        
+        {/* Logo */}
+        <div className="text-lg font-black font-mono tracking-widest text-white shrink-0">
             DATA_ENGINEER//V1.0
         </div>
-        <div className="hidden md:flex gap-8">
-            <a className="text-primary border-b-2 border-primary pb-1 font-mono tracking-tighter uppercase text-sm hover:text-accent hover:drop-shadow-[0_0_8px_rgba(var(--accent),0.6)] transition-colors duration-300" href="#about">ABOUT</a>
-            <a className="text-zinc-500 hover:text-primary transition-colors duration-500 font-mono tracking-tighter uppercase text-sm hover:drop-shadow-[0_0_8px_rgba(var(--primary),0.6)]" href="#projects">PROJECTS</a>
-            <a className="text-zinc-500 hover:text-primary transition-colors duration-500 font-mono tracking-tighter uppercase text-sm hover:drop-shadow-[0_0_8px_rgba(var(--primary),0.6)]" href="#skills">SKILLS</a>
-            <a className="text-zinc-500 hover:text-primary transition-colors duration-500 font-mono tracking-tighter uppercase text-sm hover:drop-shadow-[0_0_8px_rgba(var(--primary),0.6)]" href="#certifications">CERTIFICATIONS</a>
-            <a className="text-zinc-500 hover:text-primary transition-colors duration-500 font-mono tracking-tighter uppercase text-sm hover:drop-shadow-[0_0_8px_rgba(var(--primary),0.6)]" href="#connect">CONTACT</a>
+
+        {/* Desktop Nav */}
+        <div className="hidden lg:flex gap-8">
+            {navLinks.map((link) => (
+                <a 
+                    key={link.name}
+                    className="text-zinc-500 hover:text-primary transition-colors duration-300 font-mono tracking-tighter uppercase text-sm hover:drop-shadow-[0_0_8px_rgba(var(--primary),0.6)]" 
+                    href={link.href}
+                >
+                    {link.name}
+                </a>
+            ))}
         </div>
-        <div className="flex gap-4">
+
+        {/* Controls */}
+        <div className="flex items-center gap-4">
             <motion.button 
                 whileTap={{ scale: 0.95 }}
-                whileHover={{ scale: 1.05 }}
                 onClick={toggleTheme}
-                title={theme === 'obsidian' ? "Switch to Emerald Mode" : "Switch to Obsidian Mode"}
-                className="flex items-center gap-3 px-5 py-2.5 border border-primary/40 rounded-full bg-primary/10 text-primary hover:text-accent hover:border-accent hover:bg-accent/10 transition-colors duration-300 animate-pulse hover:animate-none shadow-[0_0_8px_var(--theme-glow)]"
+                className="flex items-center gap-2 p-2 border border-primary/40 rounded-full bg-primary/10 text-primary hover:text-accent hover:border-accent transition-colors duration-300 shadow-[0_0_8px_var(--theme-glow)]"
             >
-                <span className="material-symbols-outlined text-[22px]" style={{fontVariationSettings: "'FILL' 1"}}>
+                <span className="material-symbols-outlined text-[20px]" style={{fontVariationSettings: "'FILL' 1"}}>
                     {theme === 'obsidian' ? 'dark_mode' : 'light_mode'}
                 </span>
-                <span className="font-mono text-sm tracking-widest font-bold hidden sm:inline">SWITCH_UI</span>
             </motion.button>
+
+            {/* Mobile Menu Toggle */}
+            <button 
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="lg:hidden flex flex-col gap-1.5 p-2 z-[110]"
+            >
+                <motion.div 
+                    animate={isMenuOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
+                    className="w-6 h-0.5 bg-primary rounded-full"
+                />
+                <motion.div 
+                    animate={isMenuOpen ? { opacity: 0 } : { opacity: 1 }}
+                    className="w-6 h-0.5 bg-primary rounded-full"
+                />
+                <motion.div 
+                    animate={isMenuOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
+                    className="w-6 h-0.5 bg-primary rounded-full"
+                />
+            </button>
         </div>
+
+        {/* Mobile Menu Overlay */}
+        <AnimatePresence>
+            {isMenuOpen && (
+                <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="absolute top-20 left-0 w-full bg-bg/95 backdrop-blur-2xl border-b border-white/10 lg:hidden overflow-hidden z-[90]"
+                >
+                    <div className="flex flex-col p-8 gap-6">
+                        {navLinks.map((link) => (
+                            <a 
+                                key={link.name}
+                                onClick={() => setIsMenuOpen(false)}
+                                className="text-2xl font-mono tracking-widest text-zinc-400 hover:text-primary transition-all duration-300"
+                                href={link.href}
+                            >
+                                <span className="text-primary/40 mr-4 text-sm font-bold">0{navLinks.indexOf(link)+1}</span>
+                                {link.name}
+                            </a>
+                        ))}
+                    </div>
+                </motion.div>
+            )}
+        </AnimatePresence>
     </motion.nav>
   );
 }

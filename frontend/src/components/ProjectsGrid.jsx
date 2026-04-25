@@ -1,4 +1,4 @@
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform, AnimatePresence, useInView } from 'framer-motion';
 import { useRef, useState } from 'react';
 
 // --- Scroll Animation Variants ---
@@ -64,13 +64,49 @@ function TiltCard({ children, className, variants }) {
     );
 }
 
-export default function ProjectsGrid() {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+/**
+ * Task 1 — Mobile Auto-Reveal wrapper.
+ * On desktop (md+): buttons are hidden and revealed only on hover (CSS).
+ * On mobile (<md): useInView detects when the card is in the viewport and
+ * animates the buttons to fully visible automatically — no touch required.
+ */
+function MobileRevealButtons({ children, className }) {
+    const ref = useRef(null);
+    // amount: 0.5 = lights up when card center is on screen
+    const inView = useInView(ref, { once: false, amount: 0.5 });
 
     return (
-        <motion.section className="py-24 px-8 max-w-[1600px] mx-auto space-y-12" id="projects" initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.8, ease: 'easeOut' }}>
+        <motion.div
+            ref={ref}
+            className={className}
+            // On mobile: animate based on inView. On desktop: CSS handles via group-hover.
+            animate={{
+                opacity:   typeof window !== 'undefined' && window.innerWidth < 768 ? (inView ? 1 : 0) : undefined,
+                y:         typeof window !== 'undefined' && window.innerWidth < 768 ? (inView ? 0 : 16) : undefined,
+            }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+        >
+            {children}
+        </motion.div>
+    );
+}
+
+export default function ProjectsGrid() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const sectionRef = useRef(null);
+    const isInView = useInView(sectionRef, { once: false, amount: 0.05 });
+
+    return (
+        <motion.section
+            ref={sectionRef}
+            className="py-24 px-8 max-w-[1600px] mx-auto space-y-12"
+            id="projects"
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        >
             <div className="space-y-4">
-                <h2 className="text-4xl font-headline font-bold tracking-tight text-white uppercase">Projects</h2>
+                {/* Task 4 — text-2xl on mobile */}
+                <h2 className="text-2xl tracking-tighter sm:text-3xl md:text-4xl font-headline font-bold text-white uppercase">Projects</h2>
                 <p className="font-label text-sm text-white/60 max-w-2xl">// Engineered solutions and automated pipelines.</p>
             </div>
 
@@ -98,7 +134,8 @@ export default function ProjectsGrid() {
                             <span className="bg-transparent border border-card-border text-white/60 px-2 py-1">GitHub Actions</span>
                         </div>
                     </div>
-                    <div className="relative z-10 mt-8 flex justify-end gap-4 opacity-0 group-hover:opacity-100 transition-all duration-700 translate-y-4 group-hover:translate-y-0 group-hover:rotate-y-6">
+                    {/* Buttons: CSS group-hover on desktop, MobileRevealButtons auto-reveals on mobile */}
+                    <MobileRevealButtons className="relative z-10 mt-8 flex justify-end gap-4 opacity-0 group-hover:opacity-100 transition-all duration-700 translate-y-4 group-hover:translate-y-0 group-hover:rotate-y-6">
                         <button 
                             onClick={() => setIsModalOpen(true)}
                             className="font-label text-xs uppercase tracking-widest text-on-surface border border-outline px-4 py-3 hover:border-primary hover:text-primary transition-all duration-300 shadow-[0_0_15px_rgba(var(--primary),0.0)] hover:shadow-[0_0_20px_rgba(var(--primary),0.2)] flex items-center gap-2"
@@ -108,10 +145,8 @@ export default function ProjectsGrid() {
                         <button className="font-label text-xs uppercase tracking-widest text-primary border border-primary px-6 py-3 hover:bg-primary hover:text-bg transition-all duration-300 shadow-[0_0_15px_rgba(var(--primary),0.0)] hover:shadow-[0_0_20px_rgba(var(--primary),0.4)] flex items-center gap-2">
                             View Project <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 0" }}>arrow_forward</span>
                         </button>
-                    </div>
+                    </MobileRevealButtons>
                 </TiltCard>
-
-                {/* Project Card 2 */}
                 <TiltCard variants={{hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut', delay: 0.2 } }}} className="group relative bg-bg/50 backdrop-blur-[12px] border border-card-border rounded-none p-8 transition-all duration-700 hover:bg-bg/80 hover:border-primary/50 overflow-hidden min-h-[350px] flex flex-col justify-between">
                     <div className="absolute inset-0 bg-gradient-to-bl from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
                     <div className="relative z-10 transition-transform duration-700 group-hover:-translate-y-2 group-hover:-rotate-y-6">
@@ -126,14 +161,12 @@ export default function ProjectsGrid() {
                             <span className="bg-transparent border border-card-border text-white/60 px-2 py-1">Turtle</span>
                         </div>
                     </div>
-                    <div className="relative z-10 mt-8 flex justify-end opacity-0 group-hover:opacity-100 transition-all duration-700 translate-y-4 group-hover:translate-y-0 group-hover:-rotate-y-6">
+                    <MobileRevealButtons className="relative z-10 mt-8 flex justify-end opacity-0 group-hover:opacity-100 transition-all duration-700 translate-y-4 group-hover:translate-y-0 group-hover:-rotate-y-6">
                         <button className="font-label text-xs uppercase tracking-widest text-accent border border-accent px-6 py-3 hover:bg-accent hover:text-bg transition-all duration-300 shadow-[0_0_15px_rgba(var(--accent),0.0)] hover:shadow-[0_0_20px_rgba(var(--accent),0.4)] flex items-center gap-2">
                             View Project <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 0" }}>arrow_forward</span>
                         </button>
-                    </div>
+                    </MobileRevealButtons>
                 </TiltCard>
-
-                {/* Project Card 3 */}
                 <TiltCard variants={{hidden: { opacity: 0, y: 50 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut', delay: 0.3 } }}} className="group relative bg-bg/50 backdrop-blur-[12px] border border-card-border rounded-none p-8 transition-all duration-700 hover:bg-bg/80 hover:border-primary/50 overflow-hidden min-h-[350px] flex flex-col justify-between">
                     <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
                     <div className="relative z-10 transition-transform duration-700 group-hover:-translate-y-2 group-hover:rotate-y-6">
@@ -144,12 +177,12 @@ export default function ProjectsGrid() {
                         <h3 className="text-2xl font-headline font-semibold text-white mb-2">Data Validation Framework</h3>
                         <p className="text-white/60 font-label text-sm mb-6 max-w-[90%]">Automated QA suite for ensuring data integrity across large-scale ETL pipelines.</p>
                         <div className="flex flex-wrap gap-2 font-label text-[10px] text-on-surface-variant uppercase tracking-wider">
-                            <span className="bg-transparent border border-card-border text-white/60 px-2 py-1">Python</span>
+                            <span className="bg-transparent border border-card-border text-white/60 px-2 py-1">PySpark</span>
                             <span className="bg-transparent border border-card-border text-white/60 px-2 py-1">PyTest</span>
                             <span className="bg-transparent border border-card-border text-white/60 px-2 py-1">SQL</span>
                         </div>
                     </div>
-                    <div className="relative z-10 mt-8 flex justify-end gap-4 opacity-0 group-hover:opacity-100 transition-all duration-700 translate-y-4 group-hover:translate-y-0 group-hover:rotate-y-6">
+                    <MobileRevealButtons className="relative z-10 mt-8 flex justify-end gap-4 opacity-0 group-hover:opacity-100 transition-all duration-700 translate-y-4 group-hover:translate-y-0 group-hover:rotate-y-6">
                         <button 
                             onClick={() => setIsModalOpen(true)}
                             className="font-label text-xs uppercase tracking-widest text-on-surface border border-outline px-4 py-3 hover:border-primary hover:text-primary transition-all duration-300 shadow-[0_0_15px_rgba(var(--primary),0.0)] hover:shadow-[0_0_20px_rgba(var(--primary),0.2)] flex items-center gap-2"
@@ -159,7 +192,7 @@ export default function ProjectsGrid() {
                         <button className="font-label text-xs uppercase tracking-widest text-primary border border-primary px-6 py-3 hover:bg-primary hover:text-bg transition-all duration-300 shadow-[0_0_15px_rgba(var(--primary),0.0)] hover:shadow-[0_0_20px_rgba(var(--primary),0.4)] flex items-center gap-2">
                             View Project <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 0" }}>arrow_forward</span>
                         </button>
-                    </div>
+                    </MobileRevealButtons>
                 </TiltCard>
 
             </motion.div>
