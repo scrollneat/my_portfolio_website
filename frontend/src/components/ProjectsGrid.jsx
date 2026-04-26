@@ -74,6 +74,30 @@ function MobileRevealButtons({ children, className }) {
     );
 }
 
+const TechIcon = ({ name, className }) => {
+    const iconMap = {
+        spark: { src: "/assets/spark_logo.png", alt: "Spark", filter: "brightness-125 contrast-125" },
+        snowflake: { src: "/assets/snowflake_logo.png", alt: "Snowflake", filter: "brightness-125 contrast-125" },
+        python: { src: "/assets/python_logo.png", alt: "Python", filter: "brightness-110" },
+        sql: { src: "/assets/sql_logo.png", alt: "SQL", filter: "" },
+        databricks: { src: "/assets/databricks_logo.png", alt: "Databricks", filter: "brightness-125" }
+    };
+
+    if (iconMap[name]) {
+        const icon = iconMap[name];
+        return (
+            <div className={`${className} flex items-center justify-center overflow-hidden`}>
+                <img 
+                    src={icon.src} 
+                    alt={icon.alt} 
+                    className={`w-full h-full object-contain filter ${icon.filter}`}
+                />
+            </div>
+        );
+    }
+    return <span className={`material-symbols-outlined ${className}`} style={{ fontVariationSettings: "'FILL' 0" }}>{name}</span>;
+};
+
 const PROJECTS = [
     {
         id: 'databricks-sql',
@@ -81,7 +105,7 @@ const PROJECTS = [
         description: "Optimized Medallion pipeline for CRM/ERP data integration.",
         tags: ["Databricks", "SQL", "Medallion", "Spark"],
         status: "LIVE",
-        icon: "database",
+        icon: "databricks",
         github: "https://github.com/scrollneat/databrics-sql-datawarehouse-project",
         docs: {
             title: "End-to-End Databricks SQL Warehouse",
@@ -154,7 +178,7 @@ const PROJECTS = [
         description: "A Snowflake-powered Streamlit app for real-time data management and interactive ordering.",
         tags: ["Snowflake", "Python", "Streamlit"],
         status: "COMPLETED",
-        icon: "nutrition",
+        icon: "snowflake",
         github: "https://github.com/scrollneat/melanies_smoothies",
         docs: {
             title: "Melanie's Smoothies: Snowflake Data App",
@@ -197,7 +221,7 @@ const PROJECTS = [
         description: "A 21-day (and counting) technical journey mastering Python logic, from basic syntax to complex game engines and automation tools.",
         tags: ["Python", "Logic", "Algorithms"],
         status: "IN_PROGRESS (Day 21)",
-        icon: "terminal",
+        icon: "python",
         github: "https://github.com/scrollneat/Barathiselvan.github.io/tree/main/PYTHON_PROJECT",
         docs: {
             title: "Python Mastery: 100-Day Sprint",
@@ -460,7 +484,7 @@ export default function ProjectsGrid() {
         >
             <div className="flex flex-col md:flex-row justify-between items-end gap-6 px-4 sm:px-0">
                 <div className="space-y-4">
-                    <h2 className="text-2xl tracking-tighter sm:text-3xl md:text-4xl font-headline font-bold text-white uppercase">Projects</h2>
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-tighter font-headline font-bold text-white uppercase break-words">Projects</h2>
                     <p className="font-label text-sm text-white/60 max-w-2xl">// Engineered solutions and automated pipelines.</p>
                 </div>
             </div>
@@ -511,7 +535,7 @@ export default function ProjectsGrid() {
                                 
                                 <div className="relative z-10 pointer-events-none">
                                     <div className="flex justify-between items-start mb-6">
-                                        <span className={`material-symbols-outlined text-4xl ${idx % 2 === 0 ? 'text-primary' : 'text-accent'}`} style={{ fontVariationSettings: "'FILL' 0" }}>{project.icon}</span>
+                                        <TechIcon name={project.icon} className={`text-4xl ${idx % 2 === 0 ? 'text-primary' : 'text-accent'} w-10 h-10`} />
                                         <span className={`font-label text-xs ${project.status === 'LIVE' ? 'text-accent bg-accent/10 border-accent/20' : 'text-outline bg-white/5 border-white/10'} px-2 py-1 border`}>
                                             {project.status}
                                         </span>

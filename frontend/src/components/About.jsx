@@ -1,6 +1,7 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 import profileImg from '../assets/profile.png';
+import { ResponsiveHeader } from './ResponsiveHeader';
 
 const floatingCircles = [
     { id: 1, size: 120, top: "10%", left: "5%", duration: 15, delay: 0, color: "bg-primary/20" },
@@ -181,7 +182,7 @@ export default function About() {
                             <div className="w-3 h-3 rounded-full bg-[#27c93f] shadow-sm"></div>
                         </div>
                         <div className="w-full text-center font-mono text-xs text-white/50 tracking-widest font-bold">
-                            ABOUT_ME
+                            <ResponsiveHeader title="ABOUT_ME" />
                         </div>
                     </div>
 

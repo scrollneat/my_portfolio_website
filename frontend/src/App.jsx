@@ -9,11 +9,22 @@ import ContactFooter from './components/ContactFooter';
 import ParticleNetwork from './components/ParticleNetwork';
 import ScrollToTop from './components/ScrollToTop';
 
+const mobileThemes = ['quantum', 'emerald', 'obsidian', 'solar'];
+const desktopThemes = ['obsidian', 'quantum', 'emerald', 'solar'];
+
 function App() {
-  const themes = ['solar', 'obsidian', 'emerald'];
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('theme') || 'obsidian';
-  });
+  const [theme, setTheme] = useState('obsidian');
+
+  // Initialization & Hydration Safety
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      setTheme(savedTheme);
+    } else {
+      const isMobile = window.innerWidth < 768;
+      setTheme(isMobile ? 'quantum' : 'obsidian');
+    }
+  }, []);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -22,10 +33,15 @@ function App() {
   }, [theme]);
 
   const toggleTheme = () => {
+    const isMobile = window.innerWidth < 768;
+    const themeArray = isMobile ? mobileThemes : desktopThemes;
+    
     setTheme(prev => {
-      const currentIndex = themes.indexOf(prev);
-      const nextIndex = (currentIndex + 1) % themes.length;
-      return themes[nextIndex];
+      // Find current theme in the active array
+      // If the current theme isn't in the array (shouldn't happen), default to index 0
+      const currentIndex = themeArray.indexOf(prev);
+      const nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % themeArray.length;
+      return themeArray[nextIndex];
     });
   };
 

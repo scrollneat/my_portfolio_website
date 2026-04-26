@@ -2,6 +2,7 @@ import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { useState, useRef } from 'react';
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
+import { ResponsiveHeader } from './ResponsiveHeader';
 
 const HERO_CERTS = [
     {
@@ -71,9 +72,11 @@ export default function Certifications() {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
             {/* Header */}
-            <div className="space-y-4">
-                <h2 className="text-3xl md:text-5xl font-headline font-bold tracking-tight text-white uppercase">Professional_Certifications</h2>
-                <p className="font-label text-sm text-white/60 max-w-2xl">// Verified expertise in distributed computing and cloud data architecture.</p>
+            <div className="relative z-10 space-y-4 px-2 md:px-0 w-full max-w-full">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white uppercase leading-tight w-full">
+                    <ResponsiveHeader title="PROFESSIONAL_CERTIFICATIONS" />
+                </h2>
+                <p className="font-label text-sm text-white/60 max-w-2xl pl-1">// Verified expertise in distributed computing and cloud data architecture.</p>
             </div>
 
             {/* Hero Credentials Grid */}
@@ -85,7 +88,6 @@ export default function Certifications() {
                         onClick={() => setSelectedImage(cert.image)}
                         className="group relative cursor-pointer bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-3xl overflow-hidden transition-all duration-500 hover:border-primary/50"
                     >
-                        {/* Hero Glow */}
                         <div 
                             className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none bg-gradient-to-br from-primary/10 to-transparent"
                             style={{ background: `radial-gradient(circle at center, ${cert.color}, transparent 70%)` }}
@@ -126,8 +128,10 @@ export default function Certifications() {
 
             {/* Workshops Section */}
             <div className="space-y-10 pt-12">
-                <div className="flex items-center gap-4">
-                    <h2 className="text-xl md:text-2xl font-headline font-bold text-white/80 uppercase tracking-widest">Hands-On_Workshops</h2>
+                <div className="relative z-10 flex items-center gap-4">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white/80 uppercase leading-tight">
+                        <ResponsiveHeader title="HANDS-ON_WORKSHOPS" />
+                    </h2>
                     <div className="h-[1px] flex-grow bg-white/10"></div>
                 </div>
 
@@ -139,7 +143,6 @@ export default function Certifications() {
                             onClick={() => setSelectedImage(workshop.image)}
                             className="group relative cursor-pointer bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-2xl flex flex-col items-center gap-4 transition-all duration-300 hover:border-primary/50 hover:bg-white/10"
                         >
-                            {/* Accent Line */}
                             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
                             <div className="w-full h-24 flex items-center justify-center p-2 rounded-xl overflow-hidden mb-2">

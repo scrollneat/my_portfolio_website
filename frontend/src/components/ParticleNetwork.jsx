@@ -73,6 +73,26 @@ export default function ParticleNetwork({ theme }) {
         detectRetina: true,
     };
 
+    const quantumOptions = {
+        background: { color: { value: "transparent" } },
+        fpsLimit: 60,
+        interactivity: {
+            events: { onHover: { enable: true, mode: "grab" } },
+            modes: {
+                grab: { distance: 200, links: { opacity: 0.8, color: "#06b6d4" } },
+            },
+        },
+        particles: {
+            color: { value: ["#06b6d4", "#67e8f9"] },
+            links: { color: "#06b6d4", distance: 150, enable: true, opacity: 0.4, width: 1 },
+            move: { enable: true, speed: 1.2, direction: "none", random: false, straight: false, outModes: { default: "bounce" } },
+            number: { density: { enable: true, area: 800 }, value: 80 },
+            opacity: { value: { min: 0.2, max: 0.6 } },
+            size: { value: { min: 1, max: 3 } },
+        },
+        detectRetina: true,
+    };
+
     if (init) {
         return (
             <div className="fixed inset-0 -z-10">
@@ -82,6 +102,7 @@ export default function ParticleNetwork({ theme }) {
                     options={
                         theme === 'emerald' ? emeraldOptions : 
                         theme === 'solar' ? solarOptions : 
+                        theme === 'quantum' ? quantumOptions :
                         obsidianOptions
                     }
                 />

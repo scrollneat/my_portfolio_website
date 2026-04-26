@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
+import { Moon, Terminal, Sun, Snowflake } from 'lucide-react';
 
 export default function TopNavBar({ toggleTheme, theme }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -20,8 +21,8 @@ export default function TopNavBar({ toggleTheme, theme }) {
         className="fixed top-0 left-0 w-full h-20 flex items-center justify-between px-6 md:px-12 bg-bg/80 backdrop-blur-xl border-b border-white/10 z-[100]">
         
         {/* Logo */}
-        <div className="text-lg font-black font-mono tracking-widest text-white shrink-0">
-            PORTFOLIO//V1.0
+        <div className="text-lg md:text-xl font-bold font-mono tracking-tight text-white shrink-0 uppercase">
+            PORTFOLIO
         </div>
 
         {/* Desktop Nav */}
@@ -59,25 +60,41 @@ export default function TopNavBar({ toggleTheme, theme }) {
                     <div className="relative w-6 h-6 flex items-center justify-center">
                         <AnimatePresence mode="wait">
                             {(() => {
-                                const themes = ['solar', 'obsidian', 'emerald'];
-                                const nextTheme = themes[(themes.indexOf(theme) + 1) % themes.length];
+                                const mobileThemes = ['quantum', 'emerald', 'obsidian', 'solar'];
+                                const desktopThemes = ['obsidian', 'quantum', 'emerald', 'solar'];
                                 
+                                const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+                                const themeArray = isMobile ? mobileThemes : desktopThemes;
+                                
+                                const nextTheme = themeArray[(themeArray.indexOf(theme) + 1) % themeArray.length];
+                                
+                                const IconComponent = nextTheme === 'obsidian' ? Moon : 
+                                                     nextTheme === 'emerald' ? Terminal : 
+                                                     nextTheme === 'solar' ? Sun : 
+                                                     null;
+                                
+                                const iconColor = nextTheme === 'obsidian' ? 'text-purple-400' : 
+                                                 nextTheme === 'emerald' ? 'text-green-400' : 
+                                                 nextTheme === 'solar' ? 'text-orange-500' : 
+                                                 'text-cyan-400';
+
                                 return (
-                                    <motion.span 
+                                    <motion.div 
                                         key={nextTheme}
                                         initial={{ scale: 0, rotate: -180, opacity: 0 }}
                                         animate={{ scale: 1, rotate: 0, opacity: 1 }}
                                         exit={{ scale: 0, rotate: 180, opacity: 0 }}
                                         transition={{ duration: 0.4, type: "spring", stiffness: 260, damping: 20 }}
-                                        className={`material-symbols-outlined text-[20px] absolute ${
-                                            nextTheme === 'obsidian' ? 'text-purple-400' : 
-                                            nextTheme === 'emerald' ? 'text-green-400' : 
-                                            'text-orange-500'
-                                        }`} 
-                                        style={{fontVariationSettings: "'FILL' 1"}}
+                                        className={`absolute flex items-center justify-center ${iconColor}`}
                                     >
-                                        {nextTheme === 'obsidian' ? 'dark_mode' : nextTheme === 'emerald' ? 'terminal' : 'wb_sunny'}
-                                    </motion.span>
+                                        {IconComponent ? (
+                                            <IconComponent size={20} strokeWidth={2.5} />
+                                        ) : (
+                                            <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                                                <path d="M12 9.5L14.5 12L12 14.5L9.5 12L12 9.5ZM12 0L13.5 4H10.5L12 0ZM12 24L10.5 20H13.5L12 24ZM0 12L4 10.5V13.5L0 12ZM24 12L20 13.5V10.5L24 12ZM18 6L15.5 9L18.5 10L18 6ZM6 6L8.5 9L5.5 10L6 6ZM18 18L15.5 15L18.5 14L18 18ZM6 18L8.5 15L5.5 14L6 18Z" />
+                                            </svg>
+                                        )}
+                                    </motion.div>
                                 );
                             })()}
                         </AnimatePresence>
@@ -124,7 +141,7 @@ export default function TopNavBar({ toggleTheme, theme }) {
                                     const el = document.getElementById(link.href.substring(1));
                                     if (el) setTimeout(() => window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' }), 300);
                                 }}
-                                className="text-4xl font-mono tracking-[0.2em] text-zinc-400 hover:text-primary transition-all duration-300 flex flex-col items-center"
+                                className="text-2xl font-mono tracking-[0.2em] text-zinc-400 hover:text-primary transition-all duration-300 flex flex-col items-center"
                             >
                                 <span className="text-primary/40 text-xs font-bold mb-2">0{idx + 1}</span>
                                 {link.name}

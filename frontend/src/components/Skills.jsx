@@ -1,5 +1,6 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
+import { ResponsiveHeader } from './ResponsiveHeader';
 
 const skillCategories = [
     { title: "LANGUAGES", icon: "code",  skills: ["Python", "SQL", "C++", "HTML", "CSS"] },
@@ -7,10 +8,8 @@ const skillCategories = [
     { title: "TOOLS",     icon: "build", skills: ["GitHub", "Jenkins", "MS Office", "Power Automate"] },
 ];
 
-// Task 2 — Each card gets its own inView ref so it pulses when centered on screen
 function SkillCard({ category, idx }) {
     const cardRef = useRef(null);
-    // amount: 0.5 → lights up when 50% of the card is visible (centered on mobile)
     const inView = useInView(cardRef, { once: false, amount: 0.5 });
 
     return (
@@ -23,7 +22,6 @@ function SkillCard({ category, idx }) {
             transition={{ duration: 0.5, ease: 'easeOut', delay: idx * 0.05 }}
             className="group relative bg-bg/50 backdrop-blur-md border border-card-border p-8 transition-colors duration-500 hover:bg-bg/80 hover:border-primary flex flex-col h-full overflow-hidden rounded-2xl"
         >
-            {/* Hover/inView Glow Overlay */}
             <motion.div
                 animate={inView ? { opacity: 1 } : { opacity: 0 }}
                 transition={{ duration: 0.5 }}
@@ -71,10 +69,9 @@ export default function Skills() {
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
-            {/* Task 4 — text-2xl on mobile, scales up */}
             <div className="space-y-4">
-                <h2 className="text-2xl tracking-tighter sm:text-3xl md:text-4xl font-headline font-bold text-white uppercase">
-                    Technical_Skills
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white uppercase">
+                    <ResponsiveHeader title="TECHNICAL_SKILLS" />
                 </h2>
                 <p className="font-label text-sm text-white/60 max-w-2xl">// Core competencies and operational tooling.</p>
             </div>
