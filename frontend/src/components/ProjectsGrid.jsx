@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence, useInView } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 // --- Scroll Animation Variants ---
 const gridContainerVariants = {
@@ -273,7 +273,7 @@ const PROJECTS = [
                                             href={`https://github.com/scrollneat/Barathiselvan.github.io/tree/main/PYTHON_PROJECT/${folderName}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="p-3 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:border-primary/30 transition-all group"
+                                            className="p-3 pr-12 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:border-primary/30 transition-all group"
                                         >
                                             <h4 className="text-accent text-sm font-bold group-hover:text-primary transition-colors">Day {String(day).padStart(2, '0')}: {m.t}</h4>
                                             <p className="text-[10px] text-white/40">{m.s}</p>
@@ -286,103 +286,301 @@ const PROJECTS = [
                 }
             ]
         }
+    },
+    {
+        id: 'obsidian-portfolio',
+        title: "Obsidian: Data Engineer Portfolio",
+        description: "A custom-engineered React portfolio featuring dynamic experience tracking and a Cyber-Industrial aesthetic.",
+        tags: ["React", "Tailwind", "Framer-Motion"],
+        status: "LIVE",
+        icon: "shield",
+        github: "https://github.com/scrollneat/my_portfolio_website",
+        docs: {
+            title: "Obsidian: Data Engineer Portfolio",
+            subtitle: "Custom React UI/UX System & Data Tracking",
+            summary: "A high-performance portfolio engineered for technical depth, featuring a modular documentation system and real-time experience logic.",
+            sections: [
+                {
+                    title: "Design System: The Obsidian Theme",
+                    color: "text-primary",
+                    content: (
+                        <div className="space-y-4">
+                            <p>Developed a 'Cyber-Industrial' aesthetic using a custom color palette dominated by deep obsidian backgrounds and high-contrast vibrant accents.</p>
+                            <img src="/assets/obsidian_theme.png" alt="Obsidian Theme" className="w-full rounded-xl border border-white/10 shadow-2xl" />
+                        </div>
+                    )
+                },
+                {
+                    title: "Visual Excellence: Emerald Mode",
+                    color: "text-accent",
+                    content: (
+                        <div className="space-y-4">
+                            <p>Implemented dynamic theme switching with synchronized color tokens across all components. Emerald Mode provides a high-visibility alternative while maintaining the core industrial look.</p>
+                            <img src="/assets/obsidian_emerald.png" alt="Emerald Mode" className="w-full rounded-xl border border-white/10 shadow-2xl" />
+                        </div>
+                    )
+                },
+                {
+                    title: "Technical Core: Terminal UI & Live Metrics",
+                    color: "text-primary",
+                    content: (
+                        <div className="space-y-4">
+                            <p>The profile section features a terminal-style card with a custom logic engine to calculate experience years in real-time, ensuring the portfolio never requires manual history updates.</p>
+                            <img src="/assets/obsidian_about.png" alt="About Interface" className="w-full rounded-xl border border-white/10 shadow-2xl" />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                                <div className="p-4 bg-white/5 border border-white/10 rounded-lg">
+                                    <h4 className="text-primary text-xs font-mono uppercase mb-2">Real-Time History</h4>
+                                    <p className="text-[10px] text-white/40">Custom hooks calculate 1.8+ years of experience based on hire dates and current UTC time.</p>
+                                </div>
+                                <div className="p-4 bg-white/5 border border-white/10 rounded-lg">
+                                    <h4 className="text-accent text-xs font-mono uppercase mb-2">Doc Engine</h4>
+                                    <p className="text-[10px] text-white/40">A modular Markdown-to-Doc system that transforms project metadata into rich, immersive case studies.</p>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }
+            ]
+        }
     }
 ];
 
 export default function ProjectsGrid() {
+    const [activeIndex, setActiveIndex] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedProject, setSelectedProject] = useState(null);
+    const [isDragging, setIsDragging] = useState(false);
+    const [draggedDistance, setDraggedDistance] = useState(0);
+    const [startX, setStartX] = useState(0);
+    const [scrollLeftState, setScrollLeftState] = useState(0);
+    
+    const carouselRef = useRef(null);
     const sectionRef = useRef(null);
     const isInView = useInView(sectionRef, { once: false, amount: 0.05 });
+
+    // --- Task 1: Triple-Clone Technique ---
+    const INFINITE_PROJECTS = [...PROJECTS, ...PROJECTS, ...PROJECTS];
+    const cardWidth = 450;
+    const gap = 24;
+    const singleSetWidth = PROJECTS.length * (cardWidth + gap);
+
+    // --- Task 2: Initial 'Middle' Start ---
+    useEffect(() => {
+        if (carouselRef.current) {
+            // Instant jump to middle set without animation
+            carouselRef.current.scrollTo({
+                left: singleSetWidth,
+                behavior: 'auto'
+            });
+        }
+    }, [singleSetWidth]);
 
     const openDocs = (project) => {
         setSelectedProject(project);
         setIsModalOpen(true);
     };
 
+    const scroll = (direction) => {
+        if (carouselRef.current) {
+            const isMobile = window.innerWidth < 768;
+            const currentCardWidth = isMobile ? window.innerWidth * 0.85 : cardWidth;
+            const scrollAmount = direction === 'left' ? -(currentCardWidth + gap) : (currentCardWidth + gap);
+            carouselRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        }
+    };
+
+    // --- Task 3: The Silent Reset (The Magic Trick) ---
+    const handleScroll = () => {
+        if (!carouselRef.current) return;
+
+        const { scrollLeft, scrollWidth, offsetWidth } = carouselRef.current;
+        const thirdWidth = scrollWidth / 3;
+        
+        // Instant jump to middle if user reaches boundaries
+        if (scrollLeft < 10) {
+            carouselRef.current.scrollTo({
+                left: scrollLeft + thirdWidth,
+                behavior: 'auto'
+            });
+        } else if (scrollLeft > scrollWidth - offsetWidth - 10) {
+            carouselRef.current.scrollTo({
+                left: scrollLeft - thirdWidth,
+                behavior: 'auto'
+            });
+        }
+
+        // Active Index Tracking (calculated from middle section)
+        if (!isDragging) {
+            const isMobile = window.innerWidth < 768;
+            const currentCardWidth = isMobile ? offsetWidth * 0.85 : cardWidth;
+            const index = Math.round((scrollLeft % singleSetWidth) / (currentCardWidth + gap));
+            if (index !== activeIndex) {
+                setActiveIndex(index % PROJECTS.length);
+            }
+        }
+    };
+
+    // --- Mouse Drag Logic with Click Protection ---
+    const onMouseDown = (e) => {
+        setIsDragging(true);
+        setDraggedDistance(0);
+        setStartX(e.pageX - carouselRef.current.offsetLeft);
+        setScrollLeftState(carouselRef.current.scrollLeft);
+    };
+
+    const onMouseLeave = () => {
+        setIsDragging(false);
+    };
+
+    const onMouseUp = () => {
+        setTimeout(() => setIsDragging(false), 50);
+    };
+
+    const onMouseMove = (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const x = e.pageX - carouselRef.current.offsetLeft;
+        const dist = Math.abs(x - startX);
+        setDraggedDistance(dist);
+        
+        const walk = (x - startX) * 2;
+        carouselRef.current.scrollTo({
+            left: scrollLeftState - walk,
+            behavior: 'auto'
+        });
+    };
+
     return (
         <motion.section
             ref={sectionRef}
-            className="py-24 px-8 max-w-[1600px] mx-auto space-y-12"
+            className="py-24 px-4 sm:px-8 max-w-[1600px] mx-auto space-y-12 overflow-hidden"
             id="projects"
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
-            <div className="space-y-4">
-                <h2 className="text-2xl tracking-tighter sm:text-3xl md:text-4xl font-headline font-bold text-white uppercase">Projects</h2>
-                <p className="font-label text-sm text-white/60 max-w-2xl">// Engineered solutions and automated pipelines.</p>
+            <div className="flex flex-col md:flex-row justify-between items-end gap-6 px-4 sm:px-0">
+                <div className="space-y-4">
+                    <h2 className="text-2xl tracking-tighter sm:text-3xl md:text-4xl font-headline font-bold text-white uppercase">Projects</h2>
+                    <p className="font-label text-sm text-white/60 max-w-2xl">// Engineered solutions and automated pipelines.</p>
+                </div>
             </div>
 
-            <motion.div
-                className="grid grid-cols-1 lg:grid-cols-3 gap-8"
-                variants={gridContainerVariants}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
-            >
-                {PROJECTS.map((project, idx) => (
-                    <TiltCard 
-                        key={project.id}
-                        variants={{
-                            hidden: { opacity: 0, y: 50 }, 
-                            visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut', delay: (idx + 1) * 0.1 } }
-                        }} 
-                        className="group relative bg-bg/50 backdrop-blur-[12px] border border-card-border rounded-2xl p-8 transition-all duration-700 hover:bg-bg/80 hover:border-primary/50 overflow-hidden min-h-[400px] flex flex-col justify-between touch-manipulation cursor-pointer"
-                        onClick={() => {
-                            if (typeof window !== 'undefined' && window.innerWidth < 1024 && project.docs) {
-                                openDocs(project);
-                            }
-                        }}
-                    >
-                        <div className={`absolute inset-0 bg-gradient-to-br ${idx % 2 === 0 ? 'from-primary/5' : 'from-accent/5'} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none`}></div>
-                        
-                        <div className={`relative z-10 transition-transform duration-700 group-hover:-translate-y-2 ${idx % 2 === 0 ? 'group-hover:rotate-y-6' : 'group-hover:-rotate-y-6'}`}>
-                            <div className="flex justify-between items-start mb-6">
-                                <span className={`material-symbols-outlined text-4xl ${idx % 2 === 0 ? 'text-primary' : 'text-accent'}`} style={{ fontVariationSettings: "'FILL' 0" }}>{project.icon}</span>
-                                <span className={`font-label text-xs ${project.status === 'LIVE' ? 'text-accent bg-accent/10 border-accent/20' : 'text-outline bg-white/5 border-white/10'} px-2 py-1 border`}>
-                                    {project.status}
-                                </span>
-                            </div>
-                            <h3 className="text-2xl font-headline font-semibold text-white mb-2">{project.title}</h3>
-                            <p className="text-white/60 font-label text-sm mb-6 max-w-[95%]">{project.description}</p>
-                            <div className="flex flex-wrap gap-2 font-label text-[10px] text-on-surface-variant uppercase tracking-wider">
-                                {project.tags.map(tag => (
-                                    <span key={tag} className="bg-transparent border border-card-border text-white/60 px-2 py-1">{tag}</span>
-                                ))}
+            {/* Task 4: Top-Center Navigation Controls */}
+            <div className="flex justify-center gap-4 mb-8">
+                <button 
+                    onClick={() => scroll('left')}
+                    className="w-12 h-12 bg-primary/10 border border-primary/30 text-primary rounded-full flex items-center justify-center transition-all duration-300 hover:bg-primary hover:text-bg shadow-[0_0_20px_rgba(var(--primary),0.1)] active:scale-95"
+                >
+                    <span className="material-symbols-outlined">chevron_left</span>
+                </button>
+                <button 
+                    onClick={() => scroll('right')}
+                    className="w-12 h-12 bg-primary/10 border border-primary/30 text-primary rounded-full flex items-center justify-center transition-all duration-300 hover:bg-primary hover:text-bg shadow-[0_0_20px_rgba(var(--primary),0.1)] active:scale-95"
+                >
+                    <span className="material-symbols-outlined">chevron_right</span>
+                </button>
+            </div>
+
+            <div className="relative group/carousel px-0 md:px-12">
+                {/* Native Scroll Container with Manual Infinite Loop & Drag Logic */}
+                <div 
+                    ref={carouselRef}
+                    onScroll={handleScroll}
+                    onMouseDown={onMouseDown}
+                    onMouseLeave={onMouseLeave}
+                    onMouseUp={onMouseUp}
+                    onMouseMove={onMouseMove}
+                    className={`flex overflow-x-auto ${isDragging ? 'snap-none cursor-grabbing' : 'snap-x snap-mandatory cursor-grab'} scroll-smooth gap-6 py-8 px-4 sm:px-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] select-none`}
+                >
+                    {INFINITE_PROJECTS.map((project, idx) => (
+                        <div
+                            key={`${project.id}-${idx}`}
+                            className="w-[85vw] md:w-[450px] snap-center shrink-0"
+                        >
+                            <div
+                                className={`group relative h-full bg-bg/50 backdrop-blur-[12px] border rounded-2xl p-8 transition-all duration-500 hover:bg-bg/80 ${(idx % PROJECTS.length) === activeIndex ? 'border-primary/50 shadow-[0_0_50px_rgba(var(--primary),0.1)]' : 'border-white/5'} overflow-hidden min-h-[420px] flex flex-col justify-between cursor-pointer`}
+                                onClick={(e) => {
+                                    if (draggedDistance > 5) {
+                                        e.preventDefault();
+                                        return;
+                                    }
+                                    openDocs(project);
+                                }}
+                            >
+                                <div className={`absolute inset-0 bg-gradient-to-br ${idx % 2 === 0 ? 'from-primary/5' : 'from-accent/5'} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none`}></div>
+                                
+                                <div className="relative z-10 pointer-events-none">
+                                    <div className="flex justify-between items-start mb-6">
+                                        <span className={`material-symbols-outlined text-4xl ${idx % 2 === 0 ? 'text-primary' : 'text-accent'}`} style={{ fontVariationSettings: "'FILL' 0" }}>{project.icon}</span>
+                                        <span className={`font-label text-xs ${project.status === 'LIVE' ? 'text-accent bg-accent/10 border-accent/20' : 'text-outline bg-white/5 border-white/10'} px-2 py-1 border`}>
+                                            {project.status}
+                                        </span>
+                                    </div>
+                                    <h3 className="text-2xl font-headline font-semibold text-white mb-2">{project.title}</h3>
+                                    <p className="text-white/60 font-label text-sm mb-6 max-w-[95%]">{project.description}</p>
+                                    <div className="flex flex-wrap gap-2 font-label text-[10px] text-on-surface-variant uppercase tracking-wider">
+                                        {project.tags.map(tag => (
+                                            <span key={tag} className="bg-transparent border border-card-border text-white/60 px-2 py-1">{tag}</span>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="relative z-10 mt-8 flex justify-end gap-4">
+                                    {project.docs && (
+                                        <button 
+                                            onClick={(e) => { 
+                                                e.stopPropagation(); 
+                                                if (draggedDistance <= 5) openDocs(project); 
+                                            }}
+                                            className="font-label text-xs uppercase tracking-widest text-on-surface border border-outline px-4 py-3 hover:border-primary hover:text-primary transition-all duration-300 flex items-center gap-2 relative z-20"
+                                        >
+                                            DOCS <span className="material-symbols-outlined text-sm">article</span>
+                                        </button>
+                                    )}
+                                    <a 
+                                        href={project.github}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        onClick={(e) => {
+                                            if (draggedDistance > 5) e.preventDefault();
+                                            else e.stopPropagation();
+                                        }}
+                                        className={`font-label text-xs uppercase tracking-widest ${idx % 2 === 0 ? 'text-primary border-primary hover:bg-primary' : 'text-accent border-accent hover:bg-accent'} px-6 py-3 hover:text-bg transition-all duration-300 flex items-center gap-2 relative z-20`}
+                                    >
+                                        Source <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
+                    ))}
+                </div>
+            </div>
 
-                        <MobileRevealButtons className={`relative z-10 mt-8 flex justify-end gap-4 opacity-0 group-hover:opacity-100 transition-all duration-700 translate-y-4 group-hover:translate-y-0 ${idx % 2 === 0 ? 'group-hover:rotate-y-6' : 'group-hover:-rotate-y-6'}`}>
-                            {project.docs && (
-                                <button 
-                                    onClick={(e) => { e.stopPropagation(); openDocs(project); }}
-                                    className="font-label text-xs uppercase tracking-widest text-on-surface border border-outline px-4 py-3 hover:border-primary hover:text-primary transition-all duration-300 shadow-[0_0_15px_rgba(var(--primary),0.0)] hover:shadow-[0_0_20px_rgba(var(--primary),0.2)] flex items-center gap-2"
-                                >
-                                    DOCS <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 0" }}>article</span>
-                                </button>
-                            )}
-                            <a 
-                                href={project.github}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={(e) => e.stopPropagation()}
-                                className={`font-label text-xs uppercase tracking-widest ${idx % 2 === 0 ? 'text-primary border-primary hover:bg-primary' : 'text-accent border-accent hover:bg-accent'} px-6 py-3 hover:text-bg transition-all duration-300 shadow-[0_0_15px_rgba(var(--primary),0.0)] hover:shadow-[0_0_20px_rgba(var(--primary),0.4)] flex items-center gap-2`}
-                            >
-                                View Project <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 0" }}>arrow_forward</span>
-                            </a>
-                        </MobileRevealButtons>
-                    </TiltCard>
+            {/* Pagination Dots */}
+            <div className="flex justify-center gap-3 pt-4">
+                {PROJECTS.map((_, idx) => (
+                    <button
+                        key={idx}
+                        onClick={() => {
+                            if (carouselRef.current) {
+                                const isMobile = window.innerWidth < 768;
+                                const currentCardWidth = isMobile ? carouselRef.current.offsetWidth * 0.85 : 450;
+                                carouselRef.current.scrollTo({ left: singleSetWidth + idx * (currentCardWidth + gap), behavior: 'smooth' });
+                            }
+                        }}
+                        className={`h-1.5 transition-all duration-500 rounded-full ${activeIndex === idx ? 'w-8 bg-primary shadow-[0_0_10px_rgba(var(--primary),0.5)]' : 'w-2 bg-white/20'}`}
+                    />
                 ))}
-            </motion.div>
+            </div>
 
-            {/* Modal */}
+            {/* Documentation Modal */}
             <AnimatePresence>
                 {isModalOpen && selectedProject && selectedProject.docs && (
                     <motion.div 
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xl"
+                        className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-2xl"
                         onClick={() => setIsModalOpen(false)}
                     >
                         <motion.div 
@@ -390,49 +588,57 @@ export default function ProjectsGrid() {
                             animate={{ y: 0, scale: 1, opacity: 1 }}
                             exit={{ y: 50, scale: 0.95, opacity: 0 }}
                             transition={{ type: "spring", bounce: 0.3, duration: 0.8 }}
-                            className="relative w-full max-w-4xl max-h-[85vh] overflow-y-auto rounded-xl border border-primary bg-bg p-8 md:p-12 shadow-[0_0_50px_rgba(var(--primary),0.2)]"
+                            className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl border border-primary/30 bg-bg p-8 md:p-12 shadow-[0_0_80px_rgba(var(--primary),0.15)]"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <button 
                                 onClick={() => setIsModalOpen(false)}
-                                className="absolute top-[60px] sm:top-[80px] right-4 sm:right-6 font-label text-[8px] sm:text-[10px] tracking-widest text-white font-bold uppercase bg-[#DC2626] px-2 py-1 sm:px-4 sm:py-2 mr-2 sm:mr-6 z-[60] shadow-lg hover:bg-red-700 transition-colors"
+                                className="absolute top-6 sm:top-8 right-6 sm:right-8 group flex items-center gap-2"
                             >
-                                CLOSE
+                                <span className="text-[10px] font-mono text-white/40 group-hover:text-primary transition-colors tracking-widest uppercase">Esc // Close</span>
+                                <div className="w-10 h-10 bg-[#DC2626] flex items-center justify-center rounded-lg shadow-lg hover:scale-110 transition-all">
+                                    <span className="material-symbols-outlined text-white font-bold">close</span>
+                                </div>
                             </button>
                             
-                            <div className="mb-8 border-b border-white/10 pb-6">
-                                <h2 className="text-2xl sm:text-3xl font-headline font-bold text-white mb-2">{selectedProject.docs.title}</h2>
-                                <p className="text-primary font-mono text-[10px] sm:text-xs uppercase tracking-widest">{selectedProject.docs.subtitle}</p>
+                            <div className="mb-10 border-b border-white/5 pb-8 pr-20">
+                                <h2 className="text-3xl sm:text-4xl font-headline font-bold text-white mb-3">{selectedProject.docs.title}</h2>
+                                <p className="text-primary font-mono text-xs sm:text-sm uppercase tracking-widest opacity-80">{selectedProject.docs.subtitle}</p>
                             </div>
                             
-                            <div className="space-y-12 font-body text-white/70 leading-relaxed">
+                            <div className="space-y-16 font-body text-white/70 leading-relaxed">
                                 <section>
-                                    <h3 className="text-[10px] font-mono uppercase tracking-[0.2em] text-white/40 mb-4 flex items-center gap-2">
-                                        <span className="w-8 h-[1px] bg-white/20"></span> Executive Summary
+                                    <h3 className="text-[10px] font-mono uppercase tracking-[0.3em] text-primary/60 mb-6 flex items-center gap-4">
+                                        <span className="w-12 h-[1px] bg-primary/30"></span> Abstract
                                     </h3>
-                                    <p className="text-base sm:text-lg text-white/90 font-light">{selectedProject.docs.summary}</p>
+                                    <p className="text-lg sm:text-xl text-white/90 font-light italic border-l-2 border-primary/20 pl-6">{selectedProject.docs.summary}</p>
                                 </section>
 
                                 {selectedProject.docs.sections.map((section, idx) => (
-                                    <section key={idx} className="space-y-4">
-                                        <h3 className={`text-lg sm:text-xl font-headline font-semibold ${section.color}`}>{section.title}</h3>
-                                        <div className="text-white/70">
+                                    <section key={idx} className="space-y-6">
+                                        <h3 className={`text-xl sm:text-2xl font-headline font-semibold ${section.color} flex items-center gap-3`}>
+                                            <span className="w-2 h-2 rounded-full bg-current opacity-50"></span>
+                                            {section.title}
+                                        </h3>
+                                        <div className="text-white/70 text-base sm:text-lg overflow-x-auto scrollbar-thin scrollbar-thumb-white/10">
                                             {section.content}
                                         </div>
                                     </section>
                                 ))}
                                 
-                                <div className="pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
-                                    <div className="text-[10px] font-mono text-white/20 uppercase tracking-widest">
-                                        End of documentation // session_id: {selectedProject.id}
+                                <div className="pt-16 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 opacity-60">
+                                    <div className="text-[10px] font-mono text-white/40 uppercase tracking-widest">
+                                        Terminal Endpoint // session_0x{selectedProject.id}
                                     </div>
                                     <a 
                                         href={selectedProject.github} 
-                                        target="_blank"
+                                        target="_blank" 
                                         rel="noopener noreferrer"
-                                        className="font-mono text-sm tracking-widest text-white/50 hover:text-white border border-white/10 px-6 py-3 rounded-full hover:bg-white/5 transition-all flex items-center gap-2"
+                                        className="font-label text-xs uppercase tracking-[0.2em] text-primary hover:text-white transition-all flex items-center gap-3 border border-primary/20 px-6 py-3 rounded-full hover:bg-primary/5"
                                     >
-                                        SOURCE_CODE <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 0" }}>open_in_new</span>
+                                        <span className="whitespace-nowrap flex items-center justify-center gap-3">
+                                            [ ACCESS_REPOSITORY ] <span className="material-symbols-outlined text-sm">open_in_new</span>
+                                        </span>
                                     </a>
                                 </div>
                             </div>

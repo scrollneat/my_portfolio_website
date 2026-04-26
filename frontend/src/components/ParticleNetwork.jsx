@@ -53,13 +53,37 @@ export default function ParticleNetwork({ theme }) {
         detectRetina: true,
     };
 
+    const solarOptions = {
+        background: { color: { value: "transparent" } },
+        fpsLimit: 60,
+        interactivity: {
+            events: { onHover: { enable: true, mode: "grab" } },
+            modes: {
+                grab: { distance: 200, links: { opacity: 0.8, color: "#FF6D00" } },
+            },
+        },
+        particles: {
+            color: { value: ["#FF6D00", "#FBBF24"] },
+            links: { color: "#FF6D00", distance: 150, enable: true, opacity: 0.4, width: 1 },
+            move: { enable: true, speed: 1.4, direction: "none", random: false, straight: false, outModes: { default: "bounce" } },
+            number: { density: { enable: true, area: 800 }, value: 90 },
+            opacity: { value: { min: 0.3, max: 0.7 } },
+            size: { value: { min: 1, max: 4 } },
+        },
+        detectRetina: true,
+    };
+
     if (init) {
         return (
             <div className="fixed inset-0 -z-10">
                 <Particles
                     key={theme}   /* remount on theme change */
                     id="tsparticles"
-                    options={theme === 'emerald' ? emeraldOptions : obsidianOptions}
+                    options={
+                        theme === 'emerald' ? emeraldOptions : 
+                        theme === 'solar' ? solarOptions : 
+                        obsidianOptions
+                    }
                 />
             </div>
         );

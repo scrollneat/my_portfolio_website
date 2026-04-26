@@ -66,7 +66,7 @@ export default function ContactFooter() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                       {/* Name Input */}
                       <div className="relative group">
-                          <input className="peer w-full bg-transparent border-0 border-b border-outline text-on-surface font-mono py-3 px-0 focus:ring-0 focus:border-primary transition-all duration-300 placeholder-transparent" id="name" name="name" placeholder="NAME" type="text" value={formData.name} onChange={handleChange} />
+                          <input className="peer w-full bg-transparent border-0 border-b border-outline text-on-surface font-mono pb-2 px-0 focus:ring-0 focus:border-primary transition-all duration-300 placeholder-transparent" id="name" name="name" placeholder="NAME" type="text" value={formData.name} onChange={handleChange} />
                           <label className="absolute left-0 -top-4 text-xs font-mono text-primary transition-all duration-300 peer-placeholder-shown:text-base peer-placeholder-shown:text-on-surface-variant peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-primary" htmlFor="name">
                               &gt; NAME
                           </label>
@@ -75,7 +75,7 @@ export default function ContactFooter() {
 
                       {/* Email Input */}
                       <div className="relative group">
-                          <input className="peer w-full bg-transparent border-0 border-b border-outline text-on-surface font-mono py-3 px-0 focus:ring-0 focus:border-primary transition-all duration-300 placeholder-transparent" id="email" name="email" placeholder="EMAIL_ADDRESS" type="email" value={formData.email} onChange={handleChange} />
+                          <input className="peer w-full bg-transparent border-0 border-b border-outline text-on-surface font-mono pb-2 px-0 focus:ring-0 focus:border-primary transition-all duration-300 placeholder-transparent" id="email" name="email" placeholder="EMAIL_ADDRESS" type="email" value={formData.email} onChange={handleChange} />
                           <label className="absolute left-0 -top-4 text-xs font-mono text-primary transition-all duration-300 peer-placeholder-shown:text-base peer-placeholder-shown:text-on-surface-variant peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-primary" htmlFor="email">
                               &gt; EMAIL_ADDRESS
                           </label>
@@ -85,7 +85,7 @@ export default function ContactFooter() {
 
                   {/* Subject Input */}
                   <div className="relative group">
-                      <input className="peer w-full bg-transparent border-0 border-b border-outline text-on-surface font-mono py-3 px-0 focus:ring-0 focus:border-primary transition-all duration-300 placeholder-transparent" id="subject" name="subject" placeholder="SUBJECT" type="text" value={formData.subject} onChange={handleChange} />
+                      <input className="peer w-full bg-transparent border-0 border-b border-outline text-on-surface font-mono pb-2 px-0 focus:ring-0 focus:border-primary transition-all duration-300 placeholder-transparent" id="subject" name="subject" placeholder="SUBJECT" type="text" value={formData.subject} onChange={handleChange} />
                       <label className="absolute left-0 -top-4 text-xs font-mono text-primary transition-all duration-300 peer-placeholder-shown:text-base peer-placeholder-shown:text-on-surface-variant peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-primary" htmlFor="subject">
                           &gt; SUBJECT_LINE
                       </label>
@@ -94,7 +94,7 @@ export default function ContactFooter() {
 
                   {/* Message Input */}
                   <div className="relative group">
-                      <textarea className="peer w-full bg-transparent border-0 border-b border-outline text-on-surface font-mono py-3 px-0 focus:ring-0 focus:border-primary transition-all duration-300 placeholder-transparent resize-none" id="message" name="message" placeholder="MESSAGE_PAYLOAD" rows="4" value={formData.message} onChange={handleChange}></textarea>
+                      <textarea className="peer w-full bg-transparent border-0 border-b border-outline text-on-surface font-mono pb-2 px-0 focus:ring-0 focus:border-primary transition-all duration-300 placeholder-transparent resize-none" id="message" name="message" placeholder="MESSAGE_PAYLOAD" rows="4" value={formData.message} onChange={handleChange}></textarea>
                       <label className="absolute left-0 -top-4 text-xs font-mono text-primary transition-all duration-300 peer-placeholder-shown:text-base peer-placeholder-shown:text-on-surface-variant peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-primary" htmlFor="message">
                           &gt; MESSAGE_PAYLOAD
                       </label>
@@ -107,7 +107,7 @@ export default function ContactFooter() {
                           type="button"
                           onClick={handleSendMessage}
                           disabled={isSending}
-                          className="group relative px-8 py-3 bg-surface-container-high border border-outline-variant hover:border-primary text-primary font-mono tracking-widest text-sm transition-all duration-500 overflow-hidden hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(var(--primary),0.4)] disabled:opacity-50 disabled:hover:scale-100"
+                          className="group relative px-8 py-3 bg-surface-container-high border border-outline-variant hover:border-primary text-primary font-mono tracking-widest text-xs md:text-sm transition-all duration-500 overflow-hidden hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(var(--primary),0.4)] disabled:opacity-50 disabled:hover:scale-100"
                       >
                           <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 backdrop-blur-sm transition-opacity duration-300 pointer-events-none"></div>
                           <span className="relative z-10 flex items-center gap-2">
@@ -118,12 +118,12 @@ export default function ContactFooter() {
                                   </>
                               ) : success ? (
                                   <>
-                                      [ TRANSMISSION_SUCCESS ]
+                                      <span className="whitespace-nowrap">[ TRANSMISSION_SUCCESS ]</span>
                                       <span className="material-symbols-outlined text-sm" style={{fontVariationSettings: "'FILL' 0"}}>check_circle</span>
                                   </>
                               ) : (
                                   <>
-                                      [ SEND_MESSAGE ]
+                                      <span className="whitespace-nowrap">[ SEND_MESSAGE ]</span>
                                       <span className="material-symbols-outlined text-sm" style={{fontVariationSettings: "'FILL' 0"}}>arrow_forward</span>
                                   </>
                               )}
@@ -150,7 +150,7 @@ export default function ContactFooter() {
               <div className="mt-24 space-y-12 px-4 border-t border-white/5 pt-12">
                   <div className="flex items-center gap-4">
                       <div className="h-[1px] flex-grow bg-gradient-to-r from-transparent to-primary/30"></div>
-                      <h2 className="font-mono text-3xl tracking-[0.2em] text-primary uppercase font-bold">Connect_With_Me</h2>
+                      <h2 className="font-mono text-3xl md:text-5xl lg:text-6xl tracking-[0.2em] text-primary uppercase font-bold break-words">Connect_With_Me</h2>
                       <div className="h-[1px] flex-grow bg-gradient-to-l from-transparent to-primary/30"></div>
                   </div>
 
@@ -161,7 +161,7 @@ export default function ContactFooter() {
                             <span className="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">location_on</span>
                             <span className="font-mono text-[10px] text-primary/50 tracking-widest uppercase min-w-[80px]">Location</span>
                           </div>
-                          <span className="font-body text-lg text-white font-semibold break-all sm:break-normal">
+                          <span className="font-body text-lg text-white font-semibold break-words w-full">
                               40, Thiru vi ka street, M.G.R Nagar, Chennai - 600078, India.
                           </span>
                       </div>
@@ -183,7 +183,7 @@ export default function ContactFooter() {
                             <span className="material-symbols-outlined text-primary group-hover:-translate-y-1 transition-transform">mail</span>
                             <span className="font-mono text-[10px] text-primary/50 tracking-widest uppercase min-w-[80px]">Email</span>
                           </div>
-                          <a href="mailto:barathiselvanofficial@gmail.com" className="font-body text-lg text-white hover:text-primary transition-all font-semibold tracking-tight break-all">
+<a href="mailto:barathiselvanofficial@gmail.com" className="font-body text-lg text-white hover:text-primary transition-all font-semibold tracking-tight break-all">
                               barathiselvanofficial@gmail.com
                           </a>
                       </div>
@@ -194,7 +194,7 @@ export default function ContactFooter() {
                       <a 
                         href="https://www.linkedin.com/in/barathi-selvan-16377022a?utm_source=share_via&utm_content=profile&utm_medium=member_android" 
                         target="_blank" rel="noopener noreferrer"
-                        className="bg-white/5 border border-white/10 p-3 rounded-2xl hover:bg-[#0077B5]/20 hover:border-[#0077B5]/50 transition-all transform hover:scale-110 hover:drop-shadow-[0_0_15px_rgba(0,119,181,0.4)] text-zinc-400 hover:text-[#0077B5]"
+                        className="bg-white/5 border border-white/10 p-3 rounded-2xl bg-[#0077B5]/10 border-[#0077B5]/30 drop-shadow-[0_0_10px_rgba(0,119,181,0.5)] text-[#0077B5] transition-all transform hover:scale-110 hover:drop-shadow-[0_0_20px_rgba(0,119,181,0.8)]"
                         title="LinkedIn"
                       >
                           <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -205,7 +205,7 @@ export default function ContactFooter() {
                       <a 
                         href="https://github.com/scrollneat/" 
                         target="_blank" rel="noopener noreferrer"
-                        className="bg-white/5 border border-white/10 p-3 rounded-2xl hover:bg-white/10 hover:border-white/30 transition-all transform hover:scale-110 hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] text-zinc-400 hover:text-white"
+                        className="bg-white/5 border border-white/10 p-3 rounded-2xl bg-white/5 border-white/20 drop-shadow-[0_0_10px_rgba(255,255,255,0.3)] text-white transition-all transform hover:scale-110 hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.6)]"
                         title="GitHub"
                       >
                           <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -216,7 +216,7 @@ export default function ContactFooter() {
                       <a 
                         href="https://www.instagram.com/barathi_selvan?igsh=MWd1aGxjbXF5OG0ybw==" 
                         target="_blank" rel="noopener noreferrer"
-                        className="bg-white/5 border border-white/10 p-3 rounded-2xl hover:bg-[#E4405F]/20 hover:border-[#E4405F]/50 transition-all transform hover:scale-110 hover:drop-shadow-[0_0_15px_rgba(228,64,95,0.4)] text-zinc-400 hover:text-[#E4405F]"
+                        className="bg-white/5 border border-white/10 p-3 rounded-2xl bg-[#E4405F]/10 border-[#E4405F]/30 drop-shadow-[0_0_10px_rgba(228,64,95,0.5)] text-[#E4405F] transition-all transform hover:scale-110 hover:drop-shadow-[0_0_20px_rgba(228,64,95,0.8)]"
                         title="Instagram"
                       >
                           <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">

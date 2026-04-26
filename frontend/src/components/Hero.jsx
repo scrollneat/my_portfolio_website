@@ -74,7 +74,7 @@ export default function Hero() {
     }, []);
 
     return (
-        <section id="home" className="relative min-h-[90vh] lg:min-h-screen w-full flex items-center justify-center pt-24 mb-[-4rem] lg:mb-0 overflow-hidden bg-transparent transition-all duration-500 ease-in-out">
+        <section id="home" className="relative min-h-[90vh] lg:min-h-screen w-full flex items-center justify-center pt-24 lg:mb-0 overflow-hidden bg-transparent transition-all duration-500 ease-in-out">
             {/* Background Gradients */}
             <div className="absolute inset-0 bg-network-grid pointer-events-none opacity-60"></div>
             <div className="absolute top-1/4 -left-1/4 w-[800px] h-[800px] rounded-full bg-primary/5 blur-[120px] pointer-events-none"></div>
@@ -116,60 +116,46 @@ export default function Hero() {
                         Architecting scalable data pipelines, optimizing complex schemas, and building the resilient infrastructure necessary for tomorrow's analytical ecosystems.
                     </motion.p>
                     <div className="relative w-full py-12 lg:py-0 lg:pt-2 flex flex-col items-center lg:items-start">
-                        {/* Task 1 & 2: Mobile-only background constellation stage */}
-                        <div className="absolute inset-0 lg:hidden pointer-events-none overflow-hidden">
-                            {/* Constellation Lines */}
-                            <svg className="absolute inset-0 w-full h-full opacity-10" viewBox="0 0 100 100" preserveAspectRatio="none">
-                                <path d="M20 20 L50 50" stroke="white" strokeWidth="0.2" fill="none" />
-                                <path d="M80 20 L50 50" stroke="white" strokeWidth="0.2" fill="none" />
-                                <path d="M50 50 L25 80" stroke="white" strokeWidth="0.2" fill="none" strokeDasharray="1 1" />
-                                <path d="M50 50 L75 80" stroke="white" strokeWidth="0.2" fill="none" strokeDasharray="1 1" />
-                            </svg>
-
-                            {/* Floating Micro-Nodes */}
-                            {[
-                                { label: 'SQL', x: '20%', y: '20%', color: '#00A36C', i: 0 },
-                                { label: 'Python', x: '80%', y: '20%', color: '#A855F7', i: 1 },
-                                { label: 'PySpark', x: '50%', y: '50%', color: '#E25A1C', i: 2 },
-                                { label: 'Snowflake', x: '25%', y: '80%', color: '#29B5E8', i: 3 },
-                                { label: 'Databricks', x: '75%', y: '80%', color: '#FF3621', i: 4 },
-                            ].map((node) => (
-                                <motion.div
-                                    key={node.label}
-                                    className="absolute pointer-events-auto flex flex-col items-center gap-1"
-                                    style={{ left: node.x, top: node.y }}
-                                    initial={{ opacity: 0.6, scale: 0.8 }}
-                                    animate={{ 
-                                        y: [0, node.i % 2 === 0 ? -15 : 15, 0],
-                                        x: [0, node.i % 3 === 0 ? 10 : -10, 0],
-                                        opacity: [0.4, 0.7, 0.4]
-                                    }}
-                                    transition={{ 
-                                        duration: 6 + node.i, 
-                                        repeat: Infinity, 
-                                        ease: "easeInOut" 
-                                    }}
-                                    whileHover={{ opacity: 1, scale: 1.2, zIndex: 30 }}
-                                    whileTap={{ scale: 1.1 }}
-                                >
-                                    <div className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-[0_0_15px_rgba(255,255,255,0.05)]">
-                                        <div className="w-4 h-4 opacity-80" style={{ color: node.color }}>
-                                            {node.label === 'SQL' && <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 4.02 2 6.5C2 8.98 6.48 11 12 11C17.52 11 22 8.98 22 6.5C22 4.02 17.52 2 12 2ZM2 9.5C2 11.98 6.48 14 12 14C17.52 14 22 11.98 22 9.5V12.5C22 14.98 17.52 17 12 17C6.48 17 2 14.98 2 12.5V9.5ZM2 15.5C2 17.98 6.48 20 12 20C17.52 20 22 17.98 22 15.5V18.5C22 20.98 17.52 23 12 23C6.48 23 2 20.98 2 18.5V15.5Z" /></svg>}
-                                            {node.label === 'Python' && <svg viewBox="0 0 448 512" fill="currentColor"><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6zM286.2 404c11.1 0 20.1 9.1 20.1 20.3 0 11.3-9 20.4-20.1 20.4-11 0-20.1-9.2-20.1-20.4 .1-11.3 9.1-20.3 20.1-20.3zM167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8 .1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4zm-6.7-142.6c-11.1 0-20.1-9.1-20.1-20.3 0-11.3 9-20.4 20.1-20.4 11 0 20.1 9.2 20.1 20.4s-9 20.3-20.1 20.3z" /></svg>}
-                                            {node.label === 'PySpark' && <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L15.5 8.5H8.5L12 2ZM12 22L8.5 15.5H15.5L12 22ZM2 12L8.5 8.5V15.5L2 12ZM22 12L15.5 15.5V8.5L22 12Z" /><circle cx="12" cy="12" r="3" /></svg>}
-                                            {node.label === 'Snowflake' && <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.4 7.2H21.6L15.6 11.4L18 18.6L12 14.4L6 18.6L8.4 11.4L2.4 7.2H9.6L12 0Z" /><path d="M12 24L9.6 16.8H2.4L8.4 12.6L6 5.4L12 9.6L18 5.4L15.6 12.6L21.6 16.8H14.4L12 24Z" opacity="0.5" /></svg>}
-                                            {node.label === 'Databricks' && <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7.5L12 13L22 7.5L12 2Z" /><path d="M2 10V15.5L12 21L22 15.5V10L12 15.5L2 10Z" opacity="0.6" /></svg>}
-                                        </div>
-                                    </div>
-                                    <motion.span 
-                                        initial={{ opacity: 0, y: 5 }}
-                                        whileHover={{ opacity: 1, y: 0 }}
-                                        className="font-mono text-[7px] text-white/40 tracking-tighter uppercase"
+                        {/* Task: Infinite Auto-Scrolling Marquee for Mobile */}
+                        <div 
+                            className="relative w-full overflow-hidden flex py-12 lg:hidden"
+                            style={{ 
+                                maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)', 
+                                WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)' 
+                            }}
+                        >
+                            <motion.div 
+                                className="flex gap-4 w-max"
+                                animate={{ x: ["0%", "-50%"] }}
+                                transition={{ repeat: Infinity, ease: "linear", duration: 15 }}
+                            >
+                                {[
+                                    { label: 'SQL', icon: <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 4.02 2 6.5C2 8.98 6.48 11 12 11C17.52 11 22 8.98 22 6.5C22 4.02 17.52 2 12 2ZM2 9.5C2 11.98 6.48 14 12 14C17.52 14 22 11.98 22 9.5V12.5C22 14.98 17.52 17 12 17C6.48 17 2 14.98 2 12.5V9.5ZM2 15.5C2 17.98 6.48 20 12 20C17.52 20 22 17.98 22 15.5V18.5C22 20.98 17.52 23 12 23C6.48 23 2 20.98 2 18.5V15.5Z" /></svg>, color: '#00A36C' },
+                                    { label: 'Python', icon: <svg viewBox="0 0 448 512" fill="currentColor"><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6zM286.2 404c11.1 0 20.1 9.1 20.1 20.3 0 11.3-9 20.4-20.1 20.4-11 0-20.1-9.2-20.1-20.4 .1-11.3 9.1-20.3 20.1-20.3zM167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8 .1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4zm-6.7-142.6c-11.1 0-20.1-9.1-20.1-20.3 0-11.3 9-20.4 20.1-20.4 11 0 20.1 9.2 20.1 20.4s-9 20.3-20.1 20.3z" /></svg>, color: '#A855F7' },
+                                    { label: 'PySpark', icon: <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L15.5 8.5H8.5L12 2ZM12 22L8.5 15.5H15.5L12 22ZM2 12L8.5 8.5V15.5L2 12ZM22 12L15.5 15.5V8.5L22 12Z" /><circle cx="12" cy="12" r="3" /></svg>, color: '#E25A1C' },
+                                    { label: 'Snowflake', icon: <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.4 7.2H21.6L15.6 11.4L18 18.6L12 14.4L6 18.6L8.4 11.4L2.4 7.2H9.6L12 0Z" /><path d="M12 24L9.6 16.8H2.4L8.4 12.6L6 5.4L12 9.6L18 5.4L15.6 12.6L21.6 16.8H14.4L12 24Z" opacity="0.5" /></svg>, color: '#29B5E8' },
+                                    { label: 'Databricks', icon: <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7.5L12 13L22 7.5L12 2Z" /><path d="M2 10V15.5L12 21L22 15.5V10L12 15.5L2 10Z" opacity="0.6" /></svg>, color: '#FF3621' },
+                                ].concat([
+                                    { label: 'SQL', icon: <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 4.02 2 6.5C2 8.98 6.48 11 12 11C17.52 11 22 8.98 22 6.5C22 4.02 17.52 2 12 2ZM2 9.5C2 11.98 6.48 14 12 14C17.52 14 22 11.98 22 9.5V12.5C22 14.98 17.52 17 12 17C6.48 17 2 14.98 2 12.5V9.5ZM2 15.5C2 17.98 6.48 20 12 20C17.52 20 22 17.98 22 15.5V18.5C22 20.98 17.52 23 12 23C6.48 23 2 20.98 2 18.5V15.5Z" /></svg>, color: '#00A36C' },
+                                    { label: 'Python', icon: <svg viewBox="0 0 448 512" fill="currentColor"><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6zM286.2 404c11.1 0 20.1 9.1 20.1 20.3 0 11.3-9 20.4-20.1 20.4-11 0-20.1-9.2-20.1-20.4 .1-11.3 9.1-20.3 20.1-20.3zM167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8 .1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4zm-6.7-142.6c-11.1 0-20.1-9.1-20.1-20.3 0-11.3 9-20.4 20.1-20.4 11 0 20.1 9.2 20.1 20.4s-9 20.3-20.1 20.3z" /></svg>, color: '#A855F7' },
+                                    { label: 'PySpark', icon: <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L15.5 8.5H8.5L12 2ZM12 22L8.5 15.5H15.5L12 22ZM2 12L8.5 8.5V15.5L2 12ZM22 12L15.5 15.5V8.5L22 12Z" /><circle cx="12" cy="12" r="3" /></svg>, color: '#E25A1C' },
+                                    { label: 'Snowflake', icon: <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.4 7.2H21.6L15.6 11.4L18 18.6L12 14.4L6 18.6L8.4 11.4L2.4 7.2H9.6L12 0Z" /><path d="M12 24L9.6 16.8H2.4L8.4 12.6L6 5.4L12 9.6L18 5.4L15.6 12.6L21.6 16.8H14.4L12 24Z" opacity="0.5" /></svg>, color: '#29B5E8' },
+                                    { label: 'Databricks', icon: <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7.5L12 13L22 7.5L12 2Z" /><path d="M2 10V15.5L12 21L22 15.5V10L12 15.5L2 10Z" opacity="0.6" /></svg>, color: '#FF3621' },
+                                ]).map((tech, index) => (
+                                    <motion.div 
+                                        key={index}
+                                        whileHover={{ scale: 1.05, cursor: 'pointer' }}
+                                        className="w-20 h-20 md:w-28 md:h-28 shrink-0 flex flex-col items-center justify-center gap-2 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl group/tile transition-all duration-300 hover:border-primary/50"
                                     >
-                                        {node.label}
-                                    </motion.span>
-                                </motion.div>
-                            ))}
+                                        <div className="w-8 h-8 md:w-10 md:h-10 transition-transform duration-300 group-hover/tile:scale-110" style={{ color: tech.color }}>
+                                            {tech.icon}
+                                        </div>
+                                        <span className="font-mono text-[8px] md:text-[10px] uppercase tracking-widest text-white/40 group-hover/tile:text-white/80 transition-colors">
+                                            {tech.label}
+                                        </span>
+                                    </motion.div>
+                                ))}
+                            </motion.div>
                         </div>
 
                         <motion.div variants={itemVariants} className="relative z-20 flex flex-wrap justify-center lg:justify-start gap-4 items-center">
@@ -177,9 +163,13 @@ export default function Hero() {
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
+                                onClick={() => {
+                                    const el = document.getElementById('projects');
+                                    if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
+                                }}
                                 className="group relative px-8 py-4 bg-primary text-on-primary font-label font-bold tracking-wider rounded overflow-hidden shadow-[0_0_20px_rgba(var(--color-primary),0.3)] hover:shadow-[0_0_35px_rgba(var(--color-primary),0.5)] transition-all duration-500"
                             >
-                                <span className="relative z-10">EXPLORE ARCHIVES</span>
+                                <span className="relative z-10 whitespace-nowrap">EXPLORE PROJECTS</span>
                                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-glare" />
                             </motion.button>
 
@@ -194,7 +184,7 @@ export default function Hero() {
                         </motion.div>
                     </div>
 
-                    <motion.div variants={itemVariants} className="pt-2">
+                    <motion.div variants={itemVariants} className="pt-2 relative z-10 mb-12 lg:mb-0">
                         <div className="inline-block rounded-md p-[1px] bg-gradient-to-r from-accent to-primary animate-pulse shadow-[0_0_8px_var(--theme-glow)]">
                             <div className="bg-bg px-4 py-2 rounded-md font-mono text-xs">
                                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-accent to-primary font-bold tracking-wider">

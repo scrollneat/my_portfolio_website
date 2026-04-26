@@ -111,7 +111,7 @@ export default function About() {
                 >
                     {/* Outer wrapper — NOT overflow-hidden so halo is never clipped */}
                     <div
-                        className="relative group w-full max-w-[320px] sm:max-w-[380px] md:max-w-[480px] mx-auto mt-[-4rem] md:mt-0"
+                        className="relative group w-full max-w-[320px] sm:max-w-[380px] md:max-w-[480px] mx-auto md:mt-0 z-20 bg-bg"
                         onTouchStart={triggerGlitch}
                     >
                         {/* Cinematic Background Layer */}
@@ -186,7 +186,7 @@ export default function About() {
                     </div>
 
                     {/* Terminal Body */}
-                    <div className="p-6 sm:p-8 md:p-10 font-mono text-sm sm:text-base md:text-lg leading-loose text-white/80">
+                    <div className="px-8 sm:px-10 py-10 font-mono text-sm sm:text-base md:text-lg leading-loose text-white/80">
                         <div className="flex gap-4">
                             <span className="text-accent shrink-0">$</span>
                             <div className="typing-container">

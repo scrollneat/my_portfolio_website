@@ -2,9 +2,9 @@ import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 
 const skillCategories = [
-    { title: "LANGUAGES", icon: "code",  skills: ["Python", "SQL", "Go"] },
-    { title: "CLOUD & BIG DATA", icon: "cloud", skills: ["Snowflake", "Databricks", "PySpark", "AWS"] },
-    { title: "TOOLS",     icon: "build", skills: ["Airflow", "Selenium", "GitHub Actions"] },
+    { title: "LANGUAGES", icon: "code",  skills: ["Python", "SQL", "C++", "HTML", "CSS"] },
+    { title: "BIG DATA & CLOUD INFRASTRUCTURE", icon: "cloud", skills: ["Snowflake", "Databricks", "Pyspark", "AWS"] },
+    { title: "TOOLS",     icon: "build", skills: ["GitHub", "Jenkins", "MS Office", "Power Automate"] },
 ];
 
 // Task 2 — Each card gets its own inView ref so it pulses when centered on screen
@@ -36,7 +36,7 @@ function SkillCard({ category, idx }) {
                     <span className="material-symbols-outlined text-3xl text-primary" style={{ fontVariationSettings: "'FILL' 0" }}>
                         {category.icon}
                     </span>
-                    <h3 className="font-mono text-lg font-bold text-white tracking-widest">{category.title}</h3>
+                    <h3 className="font-mono text-lg font-bold text-white tracking-widest px-4 sm:px-0 leading-tight">{category.title}</h3>
                 </div>
 
                 <div className="flex flex-wrap gap-3 mt-auto">
@@ -74,7 +74,7 @@ export default function Skills() {
             {/* Task 4 — text-2xl on mobile, scales up */}
             <div className="space-y-4">
                 <h2 className="text-2xl tracking-tighter sm:text-3xl md:text-4xl font-headline font-bold text-white uppercase">
-                    Technical_Arsenal
+                    Technical_Skills
                 </h2>
                 <p className="font-label text-sm text-white/60 max-w-2xl">// Core competencies and operational tooling.</p>
             </div>

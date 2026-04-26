@@ -10,6 +10,7 @@ import ParticleNetwork from './components/ParticleNetwork';
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
+  const themes = ['solar', 'obsidian', 'emerald'];
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('theme') || 'obsidian';
   });
@@ -17,16 +18,19 @@ function App() {
   useEffect(() => {
     const root = document.documentElement;
     root.setAttribute('data-theme', theme);
-    root.classList.add('dark');
     localStorage.setItem('theme', theme);
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme(prev => prev === 'obsidian' ? 'emerald' : 'obsidian');
+    setTheme(prev => {
+      const currentIndex = themes.indexOf(prev);
+      const nextIndex = (currentIndex + 1) % themes.length;
+      return themes[nextIndex];
+    });
   };
 
   return (
-    <div className="min-h-screen relative z-10">
+    <div className="min-h-screen relative z-10 overflow-x-hidden w-full">
       <div className="fixed inset-0 w-full h-full -z-10 bg-surface">
         <ParticleNetwork theme={theme} />
       </div>

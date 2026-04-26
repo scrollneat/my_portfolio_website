@@ -11,6 +11,8 @@ export default {
         "primary": "var(--primary)",
         "accent": "var(--accent)",
         "bg": "var(--bg)",
+        "foreground": "var(--foreground)",
+        "muted": "var(--muted)",
         "card-border": "var(--card-border)",
       },
       borderRadius: {

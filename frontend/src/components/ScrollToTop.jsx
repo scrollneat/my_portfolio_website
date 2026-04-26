@@ -32,7 +32,7 @@ export default function ScrollToTop() {
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.5, y: 20 }}
                     onClick={scrollToTop}
-                    className="fixed bottom-8 right-8 z-[100] w-12 h-12 bg-primary text-bg rounded-full shadow-[0_0_20px_rgba(var(--primary),0.4)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all group"
+                    className="fixed bottom-8 right-8 z-[100] w-12 h-12 bg-primary/80 backdrop-blur-sm text-bg rounded-full shadow-[0_0_20px_rgba(var(--primary),0.4)] flex items-center justify-center hover:scale-110 active:scale-95 transition-all group"
                 >
                     <span className="material-symbols-outlined text-3xl group-hover:-translate-y-1 transition-transform">
                         arrow_upward
