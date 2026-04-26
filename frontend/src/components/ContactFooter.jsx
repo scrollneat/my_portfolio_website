@@ -150,7 +150,9 @@ export default function ContactFooter() {
               <div className="mt-24 space-y-12 px-4 border-t border-white/5 pt-12">
                   <div className="flex items-center gap-4">
                       <div className="h-[1px] flex-grow bg-gradient-to-r from-transparent to-primary/30"></div>
-                      <h2 className="font-mono text-3xl md:text-5xl lg:text-6xl tracking-[0.2em] text-primary uppercase font-bold break-words">Connect_With_Me</h2>
+                      <h2 className="font-mono text-2xl sm:text-3xl md:text-5xl lg:text-6xl tracking-[0.2em] text-primary uppercase font-bold">
+                        CONNECT_<br className="block md:hidden" />WITH_ME
+                      </h2>
                       <div className="h-[1px] flex-grow bg-gradient-to-l from-transparent to-primary/30"></div>
                   </div>
 
