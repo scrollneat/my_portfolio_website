@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { ResponsiveHeader } from './ResponsiveHeader';
 
 /* ── Framer Motion Variants ─────────────────────────────── */
@@ -134,11 +135,29 @@ const skillCategories = [
     { title: "TOOLS",     icon: "build", skills: ["GitHub", "Jenkins", "MS Office", "Power Automate"] },
 ];
 
-/* ── Individual Skill Badge ──────────────────────────────── */
-function SkillBadge({ skill }) {
+/* ── Individual Skill Badge with Radar Scan ──────────────── */
+function SkillBadge({ skill, isActive, onHoverStart, onHoverEnd }) {
     return (
         <motion.span
             variants={ignitionVariants}
+            animate={isActive ? {
+                scale: 1.1,
+                backgroundColor: 'var(--primary)',
+                color: 'var(--bg)',
+                borderColor: 'var(--primary)',
+                boxShadow: '0px 0px 20px rgba(var(--primary-rgb), 0.8)',
+                filter: 'brightness(1.2)',
+            } : {
+                scale: 1,
+                backgroundColor: 'color-mix(in srgb, var(--primary) 18%, transparent)',
+                color: 'var(--primary)',
+                borderColor: 'color-mix(in srgb, var(--primary) 30%, transparent)',
+                boxShadow: '0px 0px 8px rgba(var(--primary-rgb), 0.2)',
+                filter: 'brightness(1)',
+            }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            onMouseEnter={onHoverStart}
+            onMouseLeave={onHoverEnd}
             className="skill-badge font-label text-xs uppercase tracking-wider border px-4 py-2 rounded-lg inline-flex items-center gap-2 cursor-default select-none"
         >
             {skillIcons[skill] || null}
@@ -147,8 +166,8 @@ function SkillBadge({ skill }) {
     );
 }
 
-/* ── Skill Card ──────────────────────────────────────────── */
-function SkillCard({ category, idx }) {
+/* ── Skill Card with Radar Scan ────────────────────────── */
+function SkillCard({ category, idx, globalOffset, activeIndex, setActiveIndex, pauseScan, resumeScan }) {
     return (
         <motion.div
             custom={idx}
@@ -176,17 +195,52 @@ function SkillCard({ category, idx }) {
                     whileInView="visible"
                     viewport={{ once: true, amount: 0.3 }}
                 >
-                    {category.skills.map((skill, sIdx) => (
-                        <SkillBadge key={sIdx} skill={skill} />
-                    ))}
+                    {category.skills.map((skill, sIdx) => {
+                        const globalIdx = globalOffset + sIdx;
+                        return (
+                            <SkillBadge
+                                key={sIdx}
+                                skill={skill}
+                                isActive={globalIdx === activeIndex}
+                                onHoverStart={() => { pauseScan(); setActiveIndex(globalIdx); }}
+                                onHoverEnd={resumeScan}
+                            />
+                        );
+                    })}
                 </motion.div>
             </div>
         </motion.div>
     );
 }
 
-/* ── Skills Section ──────────────────────────────────────── */
+/* ── Skills Section with Radar Scan Loop ───────────────── */
+const totalSkills = skillCategories.reduce((sum, c) => sum + c.skills.length, 0);
+
 export default function Skills() {
+    const [activeIndex, setActiveIndex] = useState(0);
+    const intervalRef = useRef(null);
+    const isPaused = useRef(false);
+
+    const startScan = useCallback(() => {
+        if (intervalRef.current) clearInterval(intervalRef.current);
+        intervalRef.current = setInterval(() => {
+            if (!isPaused.current) {
+                setActiveIndex((prev) => (prev + 1) % totalSkills);
+            }
+        }, 900);
+    }, []);
+
+    const pauseScan = useCallback(() => { isPaused.current = true; }, []);
+    const resumeScan = useCallback(() => { isPaused.current = false; }, []);
+
+    useEffect(() => {
+        startScan();
+        return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
+    }, [startScan]);
+
+    /* Compute global offset for each card */
+    let offset = 0;
+
     return (
         <motion.section
             id="skills"
@@ -204,9 +258,22 @@ export default function Skills() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-fr">
-                {skillCategories.map((category, idx) => (
-                    <SkillCard key={idx} category={category} idx={idx} />
-                ))}
+                {skillCategories.map((category, idx) => {
+                    const currentOffset = offset;
+                    offset += category.skills.length;
+                    return (
+                        <SkillCard
+                            key={idx}
+                            category={category}
+                            idx={idx}
+                            globalOffset={currentOffset}
+                            activeIndex={activeIndex}
+                            setActiveIndex={setActiveIndex}
+                            pauseScan={pauseScan}
+                            resumeScan={resumeScan}
+                        />
+                    );
+                })}
             </div>
         </motion.section>
     );
