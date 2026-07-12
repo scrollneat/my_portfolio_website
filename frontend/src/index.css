@@ -156,6 +156,7 @@
   box-shadow: 0 0 30px color-mix(in srgb, var(--primary) 5%, transparent);
 }
 
+
 /* =============================================
    MOBILE TOUCH: Active state mirrors hover
    CSS group-hover: never fires on touch devices.

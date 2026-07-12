@@ -1,6 +1,46 @@
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
 import { ResponsiveHeader } from './ResponsiveHeader';
+
+/* ── Framer Motion Variants ─────────────────────────────── */
+const cardVariants = {
+    hidden: { opacity: 0, y: 40, scale: 0.97 },
+    visible: (idx) => ({
+        opacity: 1, y: 0, scale: 1,
+        transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: idx * 0.1 },
+    }),
+};
+
+const badgeContainerVariants = {
+    hidden: {},
+    visible: {
+        transition: { staggerChildren: 0.15, delayChildren: 0.2 },
+    },
+};
+
+/* ── The Ignition Variant ────────────────────────────────── */
+const ignitionVariants = {
+    hidden: {
+        opacity: 0,
+        scale: 0.8,
+        filter: 'brightness(0.5)',
+        boxShadow: '0px 0px 0px rgba(var(--primary-rgb), 0)',
+    },
+    visible: {
+        opacity: 1,
+        scale: 1,
+        filter: 'brightness(1)',
+        boxShadow: [
+            '0px 0px 0px rgba(var(--primary-rgb), 0)',
+            '0px 0px 20px rgba(var(--primary-rgb), 0.8)',
+            '0px 0px 8px rgba(var(--primary-rgb), 0.2)',
+        ],
+        transition: {
+            duration: 0.5,
+            ease: [0.22, 1, 0.36, 1],
+            boxShadow: { duration: 0.8, times: [0, 0.3, 1], ease: 'easeOut' },
+        },
+    },
+};
 
 /* ── Inline SVG skill icons ─────────────────────────────── */
 const skillIcons = {
@@ -95,15 +135,10 @@ const skillCategories = [
 ];
 
 /* ── Individual Skill Badge ──────────────────────────────── */
-function SkillBadge({ skill, sIdx, inView }) {
+function SkillBadge({ skill }) {
     return (
         <motion.span
-            key={sIdx}
-            animate={inView
-                ? { borderColor: 'color-mix(in srgb, var(--primary) 50%, transparent)', color: 'var(--primary)' }
-                : { borderColor: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.6)' }
-            }
-            transition={{ duration: 0.4, delay: sIdx * 0.06 }}
+            variants={ignitionVariants}
             className="skill-badge font-label text-xs uppercase tracking-wider border px-4 py-2 rounded-lg inline-flex items-center gap-2 cursor-default select-none"
         >
             {skillIcons[skill] || null}
@@ -114,24 +149,16 @@ function SkillBadge({ skill, sIdx, inView }) {
 
 /* ── Skill Card ──────────────────────────────────────────── */
 function SkillCard({ category, idx }) {
-    const cardRef = useRef(null);
-    const inView = useInView(cardRef, { once: false, amount: 0.5 });
-
     return (
         <motion.div
-            ref={cardRef}
-            animate={inView
-                ? { borderColor: 'var(--primary)', boxShadow: '0 0 40px var(--theme-glow)', scale: 1 }
-                : { borderColor: 'rgba(255,255,255,0.1)', boxShadow: 'none', scale: 1 }
-            }
-            transition={{ duration: 0.5, ease: 'easeOut', delay: idx * 0.05 }}
-            className="skill-card group relative bg-bg/50 backdrop-blur-md border border-card-border p-8 transition-colors duration-500 hover:bg-bg/80 hover:border-primary flex flex-col h-full overflow-hidden rounded-2xl"
+            custom={idx}
+            variants={cardVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.4 }}
+            className="skill-card group relative bg-bg/50 backdrop-blur-md border border-card-border p-8 hover:bg-bg/80 hover:border-primary flex flex-col h-full overflow-hidden rounded-2xl"
         >
-            <motion.div
-                animate={inView ? { opacity: 1 } : { opacity: 0 }}
-                transition={{ duration: 0.5 }}
-                className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent pointer-events-none"
-            />
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent pointer-events-none" />
             <div className="absolute -inset-1 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500 -z-10 rounded-xl" />
 
             <div className="relative z-10 flex flex-col h-full">
@@ -142,11 +169,17 @@ function SkillCard({ category, idx }) {
                     <h3 className="font-mono text-lg font-bold text-white tracking-widest px-4 sm:px-0 leading-tight">{category.title}</h3>
                 </div>
 
-                <div className="flex flex-wrap gap-3 mt-auto">
+                <motion.div
+                    className="flex flex-wrap gap-3 mt-auto"
+                    variants={badgeContainerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.3 }}
+                >
                     {category.skills.map((skill, sIdx) => (
-                        <SkillBadge key={sIdx} skill={skill} sIdx={sIdx} inView={inView} />
+                        <SkillBadge key={sIdx} skill={skill} />
                     ))}
-                </div>
+                </motion.div>
             </div>
         </motion.div>
     );
@@ -154,15 +187,13 @@ function SkillCard({ category, idx }) {
 
 /* ── Skills Section ──────────────────────────────────────── */
 export default function Skills() {
-    const sectionRef = useRef(null);
-    const isInView = useInView(sectionRef, { once: false, amount: 0.05 });
-
     return (
         <motion.section
-            ref={sectionRef}
             id="skills"
             className="py-24 px-6 sm:px-8 max-w-[1600px] mx-auto space-y-12"
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }}
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
             <div className="space-y-4">
