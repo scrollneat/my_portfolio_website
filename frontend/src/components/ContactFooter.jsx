@@ -39,6 +39,7 @@ export default function ContactFooter() {
       
       setFormStatus('sent');
       e.target.reset(); // Clear form after success
+      setTimeout(() => setFormStatus('idle'), 5000);
     } catch (error) {
       console.error('Submission Error:', error);
       setFormStatus('error');
