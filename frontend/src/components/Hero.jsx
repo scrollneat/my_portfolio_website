@@ -175,6 +175,7 @@ export default function Hero() {
 
                             <motion.a
                                 href="/resume.pdf"
+                                download="Barathiselvan_Resume.pdf"
                                 whileHover={{ scale: 1.05, borderColor: 'var(--color-primary)' }}
                                 whileTap={{ scale: 0.95 }}
                                 className="inline-block px-8 py-4 bg-transparent border border-outline text-on-surface font-label font-bold tracking-wide rounded hover:bg-surface-container-high hover:border-primary transition-all duration-300"
