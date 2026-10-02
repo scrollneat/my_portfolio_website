@@ -21,8 +21,7 @@ function App() {
     if (savedTheme) {
       setTheme(savedTheme);
     } else {
-      const isMobile = window.innerWidth < 768;
-      setTheme(isMobile ? 'quantum' : 'obsidian');
+      setTheme('obsidian');
     }
   }, []);
 
